@@ -400,7 +400,12 @@
               </div>
             </div>
       </div>
+      <button class="btn btn-success" ng-click="startAll(sessionid)">Start All</button>
+      <button class="btn btn-danger" ng-click="stopAll(sessionid)">Stop All</button>
       
+      <div class="container">
+          <video id="mainvideo" autoplay playsinline></video>
+      </div> 
 
       <button type="submit" class="btn btn-primary btn-lg btn-block" ng-click="redirectRules(sessionid)">Add Assessment criteria</button>
 
