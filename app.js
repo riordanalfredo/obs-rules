@@ -5,7 +5,6 @@ const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 
-
 const routes = require('./server/routes/index');
 // var users = require('./routes/users');
 
@@ -20,11 +19,10 @@ var io = require('socket.io')(server);
 //})
 
 /* setup socket.io */
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   req.io = io;
   next();
 });
-
 
 // setup mqtt
 /*
@@ -110,7 +108,7 @@ if (app.get('env') === 'development') {
     res.status(err.status || 500);
     res.json({
       message: err.message,
-      error: err
+      error: err,
     });
   });
 }
@@ -121,9 +119,8 @@ app.use((err, req, res, next) => {
   res.status(err.status || 500);
   res.json({
     message: err.message,
-    error: {}
+    error: {},
   });
 });
 
-
-module.exports = {app: app, server: server};
+module.exports = { app: app, server: server };
