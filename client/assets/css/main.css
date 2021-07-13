@@ -8,16 +8,17 @@ body {
 .banner {
   background-position: top center;
   height: 265px;
-  background-color: #FFF;
+  background-color: #fff;
 }
 
-.banner h1 span, h2 span {
-  background-color: rgba(255,255,255,0.8);
+.banner h1 span,
+h2 span {
+  background-color: rgba(255, 255, 255, 0.8);
   border-radius: 5px;
 }
 
 #bannerlogo {
-  background-color:  #1F4963; /* nwoods blue */
+  background-color: #1f4963; /* nwoods blue */
   font-weight: 900;
   font-size: 120%;
   color: white;
@@ -26,7 +27,7 @@ body {
 }
 
 #toplogo {
-  background-color:  #1F4963; /* nwoods blue */
+  background-color: #1f4963; /* nwoods blue */
   font-weight: 900;
   font-size: 120%;
   color: white;
@@ -37,7 +38,7 @@ body {
 #bannertop {
   background-image: url('../images/banner2.png');
   background-repeat: no-repeat;
-  box-shadow: 0px 2px 5px #D3D3D3;
+  box-shadow: 0px 2px 5px #d3d3d3;
   padding-top: 48px;
 }
 
@@ -73,7 +74,7 @@ h1 {
   margin-left: 0px;
   margin-right: 0px;
 
-  color:  #ffffff;
+  color: #ffffff;
 }
 
 #footer ul {
@@ -85,7 +86,7 @@ h1 {
 }
 
 #footer h3 {
-  background-color:  #1F4963; /* nwoods blue */
+  background-color: #1f4963; /* nwoods blue */
   font-weight: 900;
   font-size: 40px;
   color: white;
@@ -116,7 +117,7 @@ h1 {
   color: white;
 }
 .navbar-inverse .navbar-brand:hover {
-  background-color:  #1F4963; /* nwoods blue */
+  background-color: #1f4963; /* nwoods blue */
 }
 
 .nav > li > a {
@@ -136,11 +137,11 @@ h1 {
 .nav li {
   float: left;
   line-height: 40px;
-  -o-transition:.5s;
-  -ms-transition:.5s;
-  -moz-transition:.5s;
-  -webkit-transition:.5s;
-  transition:.5s;
+  -o-transition: 0.5s;
+  -ms-transition: 0.5s;
+  -moz-transition: 0.5s;
+  -webkit-transition: 0.5s;
+  transition: 0.5s;
 }
 
 .nav li:hover {
@@ -152,11 +153,11 @@ h1 {
 }
 
 .buy {
-  background-color: #79C900;
+  background-color: #79c900;
 }
 
 .activate {
-  background-color: #00A9C9;
+  background-color: #00a9c9;
 }
 
 /* bootstrap override */
@@ -165,7 +166,7 @@ h1 {
   padding-left: inherit;
   padding-right: inherit;
 }
-.container-fluid>.navbar-header {
+.container-fluid > .navbar-header {
   margin-left: inherit;
   margin-right: inherit;
 }
@@ -193,7 +194,7 @@ h1 {
 }
 
 .diagramStyling {
-  background-color: #F8F8F8;
+  background-color: #f8f8f8;
 }
 
 p.box {
@@ -210,8 +211,13 @@ p.box {
   margin: 0;
 }
 
-.navbar-nav>li>a.selected { background: #707070; color: #FFF;}
-.navbar-default .navbar-nav>li>a:hover { color: #FFF;}
+.navbar-nav > li > a.selected {
+  background: #707070;
+  color: #fff;
+}
+.navbar-default .navbar-nav > li > a:hover {
+  color: #fff;
+}
 
 /* used in api, intro, and samples pages */
 #non-fixed-nav {
@@ -220,40 +226,40 @@ p.box {
 
 /* For the samples index.html */
 .btn-tag {
-  background-color: #3E5264;
-  border-color: #3E5264;
+  background-color: #3e5264;
+  border-color: #3e5264;
   border-bottom: 2px solid rgba(0, 0, 0, 0.15);
   margin: 2px;
 }
 
 .btn-tag:hover {
-  background-color: #4E878B;
-  border-color: #4E878B;
+  background-color: #4e878b;
+  border-color: #4e878b;
   border-bottom: 2px solid rgba(0, 0, 0, 0.15);
 }
 
 .btn-selected-tag {
   background-color: white;
-  border-color: #3E5264;
-  color: #3E5264;
+  border-color: #3e5264;
+  color: #3e5264;
   border-bottom: 2px solid #354655;
   margin: 2px;
 }
 
 .btn-selected-tag:hover {
   background-color: white;
-  border-color: #3E5264;
-  color: #3E5264;
+  border-color: #3e5264;
+  color: #3e5264;
 }
 
 /* Samples, override Bootstrap settings for certain elements */
 #sample {
   padding-top: 15px;
 }
-#sample input[type=radio] {
+#sample input[type='radio'] {
   margin: 3px 3px 0px 5px;
 }
-#sample input[type=range] {
+#sample input[type='range'] {
   display: inline-block;
   width: auto;
 }
@@ -262,7 +268,7 @@ p.box {
   font-weight: normal;
 }
 #sample pre {
-  font-size : 9pt;
+  font-size: 9pt;
 }
 #sample textarea {
   font-family: monospace;
@@ -286,7 +292,7 @@ ul hr {
 hr.changelog {
   margin-top: 40px;
   margin-bottom: 40px;
-  border-top: 4px solid #CCC;
+  border-top: 4px solid #ccc;
 }
 
 /* BOOTSTRAP MEDIA BREAKPOINTS */
@@ -302,7 +308,7 @@ hr.changelog {
     float: left;
     width: 80%;
   }
-  .navbar>.container-fluid .navbar-brand {
+  .navbar > .container-fluid .navbar-brand {
     margin-left: 10px;
   }
   .navbar-fixed-top .navbar-collapse {
@@ -329,7 +335,8 @@ hr.changelog {
   .navbar-collapse.collapse.in {
     display: block !important;
   }
-  .navbar-header .collapse, .navbar-toggle {
+  .navbar-header .collapse,
+  .navbar-toggle {
     display: block !important;
   }
   .navheader-container {

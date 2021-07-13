@@ -1,40 +1,47 @@
 var express = require('express');
 var router = express.Router();
-path = require("path");
+path = require('path');
 
 router.get('/', (req, res, next) => {
-  res.sendFile(path.join(
-    __dirname, '..', '..', 'client', 'views', 'index.html'));
+  res.sendFile(
+    path.join(__dirname, '..', '..', 'client', 'views', 'index.html')
+  );
 });
 
 router.get('/timeline/:id', (req, res, next) => {
   var options = {
     headers: {
-        'id_session': req.params.id
-    }
+      id_session: req.params.id,
+    },
   };
-  res.sendFile(path.join(
-    __dirname, '..', '..', 'client', 'views', 'timeline.html'), options);
+  res.sendFile(
+    path.join(__dirname, '..', '..', 'client', 'views', 'timeline.html'),
+    options
+  );
 });
 
 router.get('/proxies/:id', (req, res, next) => {
   var options = {
     headers: {
-        'group_n': req.params.id
-    }
+      group_n: req.params.id,
+    },
   };
-  res.sendFile(path.join(
-    __dirname, '..', '..', 'client', 'views', 'physical_proxy.html'), options);
+  res.sendFile(
+    path.join(__dirname, '..', '..', 'client', 'views', 'physical_proxy.html'),
+    options
+  );
 });
 
 router.get('/social/:id', (req, res, next) => {
   var options = {
     headers: {
-        'group_n': req.params.id
-    }
+      group_n: req.params.id,
+    },
   };
-  res.sendFile(path.join(
-    __dirname, '..', '..', 'client', 'views', 'social_proxy.html'), options);
+  res.sendFile(
+    path.join(__dirname, '..', '..', 'client', 'views', 'social_proxy.html'),
+    options
+  );
 });
 
 router.use('/api/v1/sessions', require('./sessions'));

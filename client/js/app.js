@@ -1,63 +1,63 @@
-var app = angular.module("group-analytics", ["ngRoute", "ngSanitize"]);
+var app = angular.module('group-analytics', ['ngRoute', 'ngSanitize']);
 //import pdfmake
 //import pdfMake from 'pdfmake/build/pdfmake.js';
 //import pdfFonts from 'pdfmake/build/vfs_fonts.js';
 //var manageRules = require('./controllers/rules');
 
 app.config([
-  "$routeProvider",
+  '$routeProvider',
   function ($routeProvider) {
     $routeProvider
-      .when("/", {
-        templateUrl: "/allSessions.html",
-        controller: "mainController",
+      .when('/', {
+        templateUrl: '/allSessions.html',
+        controller: 'mainController',
       })
-      .when("/addsession", {
-        templateUrl: "/addSession.html",
-        controller: "sessionController",
+      .when('/addsession', {
+        templateUrl: '/addSession.html',
+        controller: 'sessionController',
       })
-      .when("/actions/:id", {
-        templateUrl: "/addActionstoSession.html",
-        controller: "actionsessionController",
+      .when('/actions/:id', {
+        templateUrl: '/addActionstoSession.html',
+        controller: 'actionsessionController',
       })
-      .when("/addactions/:id", {
-        templateUrl: "/allActions.html",
-        controller: "actionsController",
+      .when('/addactions/:id', {
+        templateUrl: '/allActions.html',
+        controller: 'actionsController',
       })
-      .when("/add", {})
-      .when("/media/:id", {
-        templateUrl: "/addMedia.html",
-        controller: "mediaController",
+      .when('/add', {})
+      .when('/media/:id', {
+        templateUrl: '/addMedia.html',
+        controller: 'mediaController',
       })
-      .when("/objects/:id", {
-        templateUrl: "/addObjects.html",
-        controller: "objectsController",
+      .when('/objects/:id', {
+        templateUrl: '/addObjects.html',
+        controller: 'objectsController',
       })
-      .when("/manage/:id", {
-        templateUrl: "/controlSources.html",
-        controller: "manageSourcesController",
+      .when('/manage/:id', {
+        templateUrl: '/controlSources.html',
+        controller: 'manageSourcesController',
       })
-      .when("/rules/:id", {
-        templateUrl: "../views/rules.html",
-        controller: "manageRules",
+      .when('/rules/:id', {
+        templateUrl: '../views/rules.html',
+        controller: 'manageRules',
       })
-      .when("/reports/:id", {
-        templateUrl: "../views/reports.html",
-        controller: "manageReports",
+      .when('/reports/:id', {
+        templateUrl: '../views/reports.html',
+        controller: 'manageReports',
       })
-      .when("/timeLine/:id", {
-        templateUrl: "../views/timeLineRules.html",
-        controller: "manageVis",
+      .when('/timeLine/:id', {
+        templateUrl: '../views/timeLineRules.html',
+        controller: 'manageVis',
       })
-      .when("/delete/:id", {})
+      .when('/delete/:id', {})
       .otherwise({
-        redirectTo: "/",
+        redirectTo: '/',
       });
   },
 ]);
 
-app.factory("socket", [
-  "$rootScope",
+app.factory('socket', [
+  '$rootScope',
   function ($rootScope) {
     var socket = io.connect();
 
@@ -75,45 +75,45 @@ app.factory("socket", [
 //app.controller('manageRules2', manageRules.managerulesFunc);
 
 app.controller(
-  "mainController",
+  'mainController',
   function ($window, $scope, $location, $routeParams, $http, socket) {
     $scope.formData = {};
     $scope.sessionData = {};
     // Get all sessions
     $http
-      .get("/api/v1/sessions/all")
+      .get('/api/v1/sessions/all')
       .success(function (data) {
         $scope.sessionData = data;
         //console.log(data);
       })
       .error(function (error) {
-        console.log("Error: " + error);
+        console.log('Error: ' + error);
       });
 
     $scope.redirectSession = function () {
-      $location.path("/addsession");
+      $location.path('/addsession');
     };
     // List actions
     $scope.listActions = function (sessionID) {
       //alert(sessionID);
-      $location.url("/addactions/" + sessionID);
+      $location.url('/addactions/' + sessionID);
     };
 
     //redirect to manage data sources
     $scope.redirectSources = function (sessionID) {
-      $location.path("/media/" + sessionID);
+      $location.path('/media/' + sessionID);
     };
 
     $scope.redirectObjects = function (sessionID) {
-      $location.path("/objects/" + sessionID);
+      $location.path('/objects/' + sessionID);
     };
 
     $scope.redirectActionstoSession = function (sessionID) {
-      $location.path("/actions/" + sessionID);
+      $location.path('/actions/' + sessionID);
     };
 
     $scope.redirectCapture = function (sessionID) {
-      $location.path("/manage/" + sessionID);
+      $location.path('/manage/' + sessionID);
     };
 
     /*  $scope.redirectTimeline = function(sessionID) {
@@ -142,55 +142,55 @@ app.controller(
   };*/
 
     $scope.redirectTimeline = function (sessionID) {
-      $location.path("/timeLine/" + sessionID);
+      $location.path('/timeLine/' + sessionID);
     };
 
     $scope.redirectRules = function (sessionID) {
       console.log(sessionID);
-      $location.path("/rules/" + sessionID);
+      $location.path('/rules/' + sessionID);
     };
 
     $scope.redirectReports = function (sessionID) {
-      $location.path("/reports/" + sessionID);
+      $location.path('/reports/' + sessionID);
     };
   }
 );
 
 app.controller(
-  "manageReports",
+  'manageReports',
   function ($window, $scope, $location, $routeParams, $http, socket) {
     $scope.sessionid = $routeParams.id;
 
     // GET ALL RULES OF A SESSION
     $http
-      .get("/api/v2/rules/all/" + $scope.sessionid)
+      .get('/api/v2/rules/all/' + $scope.sessionid)
       .success(function (data) {
         $scope.sessionRules = data;
       })
       .error(function (error) {
-        console.log("Error: " + error);
+        console.log('Error: ' + error);
       });
 
     $scope.seeTimeline = () => {
       $scope.timeline = true;
-      console.log("In the app.js session id: ", $scope.sessionid);
+      console.log('In the app.js session id: ', $scope.sessionid);
       var dataObj = {
         id: $scope.sessionid,
       };
-      console.log("In the Obj ", dataObj.id);
+      console.log('In the Obj ', dataObj.id);
 
       $http
-        .get("/api/v1/visualisations/getJsonFromFile/" + dataObj.id, dataObj)
+        .get('/api/v1/visualisations/getJsonFromFile/' + dataObj.id, dataObj)
         .success(function (alldata) {
           $scope.alldata = alldata;
         })
         .error(function (error) {
-          console.log("Error: ", error);
+          console.log('Error: ', error);
         });
     };
 
     $scope.generateReport = () => {
-      console.log("seeVis session id:", $scope.sessionid);
+      console.log('seeVis session id:', $scope.sessionid);
       $scope.Divreport = $scope.Divreport = true;
       var infoReport = {};
       //console.log('seeVis rule id:',rulesID);
@@ -203,16 +203,16 @@ app.controller(
       };
       //get rules first
       $http
-        .get("/api/v2/rules/all/" + $scope.sessionid)
+        .get('/api/v2/rules/all/' + $scope.sessionid)
         .success(function (data) {
           $scope.sessionRules = data;
           $http
-            .post("/api/v1/visualisations/getDataforVis", dataObj)
+            .post('/api/v1/visualisations/getDataforVis', dataObj)
             .success(function (dataActions) {
               //console.log(dataActions);
               // validate each rule
 
-              infoReport["dataReport"] = [];
+              infoReport['dataReport'] = [];
               //infoReport['FeedbackInfo'] =[];
 
               for (rule in data) {
@@ -225,13 +225,13 @@ app.controller(
                     `/api/v2/rules/selectOneRule/${rulesID}?id_session=${dataObj.id_session}`
                   )
                   .success(function (detailRule) {
-                    rulesInfo["id"] = detailRule[0].id;
-                    rulesInfo["name"] = detailRule[0].name;
-                    rulesInfo["rule"] =
+                    rulesInfo['id'] = detailRule[0].id;
+                    rulesInfo['name'] = detailRule[0].name;
+                    rulesInfo['rule'] =
                       detailRule[0].first_action +
-                      " - " +
+                      ' - ' +
                       detailRule[0].value_of_mag +
-                      " - " +
+                      ' - ' +
                       detailRule[0].second_action;
                     //console.log('Rules Info: ', rulesInfo);
                     //console.log('Info Report: ', infoReport);
@@ -243,53 +243,53 @@ app.controller(
                       rule: detailRule,
                     };
                     $http
-                      .post("/api/v2/rules/validateRule/" + rulesID, toSend)
+                      .post('/api/v2/rules/validateRule/' + rulesID, toSend)
                       .success(function (objs) {
                         //$scope.forReport = objs;
                         //console.log('How to access status', objs);
-                        rulesInfo["id"] = detailRule[0].id;
-                        rulesInfo["status"] = objs.status;
-                        rulesInfo["mesage"] = objs.title;
+                        rulesInfo['id'] = detailRule[0].id;
+                        rulesInfo['status'] = objs.status;
+                        rulesInfo['mesage'] = objs.title;
                         // create a json file
 
-                        infoReport["dataReport"].push(rulesInfo);
+                        infoReport['dataReport'].push(rulesInfo);
                         //console.log('Inside validateRule: ', detailRule[0].id, objs.title);
                         //rulesInfo = {};
                       })
                       .error(function (error) {
-                        console.log("Error: ", error);
+                        console.log('Error: ', error);
                       });
                   })
                   .error(function (error) {
-                    console.log("Error: ", error);
+                    console.log('Error: ', error);
                   });
                 //$scope.infoReport = infoReport;
               } // end for
             })
             .error(function (error) {
-              console.log("Error: ", error);
+              console.log('Error: ', error);
             });
           $scope.infoReport = infoReport;
-          console.log("############", infoReport);
+          console.log('############', infoReport);
           //createHtml(infoReport);
         })
         .error(function (error) {
-          console.log("Error: " + error);
+          console.log('Error: ' + error);
         });
     };
 
     $scope.seeVis = (rulesID) => {
       //$scope.vis = true;
       //$location.path('/timeline/'+sessionID);
-      console.log("seeVis session id:", $scope.sessionid);
-      console.log("seeVis rule id:", rulesID);
+      console.log('seeVis session id:', $scope.sessionid);
+      console.log('seeVis rule id:', rulesID);
 
       var dataObj = {
         id_session: $scope.sessionid,
         id_rule: rulesID,
       };
       $http
-        .post("/api/v1/visualisations/getDataforVis", dataObj)
+        .post('/api/v1/visualisations/getDataforVis', dataObj)
         .success(function (dataActions) {
           console.log(dataActions);
           //$scope.dataForVis = dataActions;
@@ -302,28 +302,28 @@ app.controller(
                 rule: detailRule,
               };
               $http
-                .post("/api/v2/rules/validateRule/" + rulesID, toSend)
+                .post('/api/v2/rules/validateRule/' + rulesID, toSend)
                 .success(function (objs) {
                   $scope.rulesVal = objs;
-                  console.log("I am in the nested call");
+                  console.log('I am in the nested call');
                 })
                 .error(function (error) {
-                  console.log("Error: ", error);
+                  console.log('Error: ', error);
                 });
             })
             .error(function (error) {
-              console.log("Error: ", error);
+              console.log('Error: ', error);
             });
         })
         .error(function (error) {
-          console.log("Error: ", error);
+          console.log('Error: ', error);
         });
     };
   }
 );
 
 app.controller(
-  "manageRules",
+  'manageRules',
   function ($window, $scope, $location, $routeParams, $http, socket) {
     //This first line is to assure the session id in rules
     $scope.sessionid = $routeParams.id;
@@ -333,54 +333,54 @@ app.controller(
     $scope.sessionRules = {};
     $scope.actions = {};
     $scope.selectedRoles = {};
-    pathHelp = "./img/Help";
+    pathHelp = './img/Help';
 
     // GET ALL RULES OF A SESSION
 
     $http
-      .get("/api/v2/rules/all/" + $scope.sessionid)
+      .get('/api/v2/rules/all/' + $scope.sessionid)
       .success(function (data) {
         $scope.sessionRules = data;
       })
       .error(function (error) {
-        console.log("Error: " + error);
+        console.log('Error: ' + error);
       });
 
     //get all typeofRules=typesRules
     var dataObj = {
       id_session: $scope.sessionid,
-      type: "type",
+      type: 'type',
     };
     //LIST ALL THE TYPE OF RULES
     $http
-      .get("/api/v2/rules/types", dataObj)
+      .get('/api/v2/rules/types', dataObj)
       .success(function (typeR) {
         $scope.typeRules = typeR;
       })
       .error(function (error) {
-        console.log("Error: " + error);
+        console.log('Error: ' + error);
       });
 
     //LIST ALL ACTIONS OF A SESSION
     $http
-      .get("/api/v2/rules/actions/" + $scope.sessionid)
+      .get('/api/v2/rules/actions/' + $scope.sessionid)
       .success(function (objs) {
         $scope.actions = objs;
         //console.log('The session id here in actions: ', $scope.sessionid);
       })
       .error(function (error) {
-        console.log("Error: " + error);
+        console.log('Error: ' + error);
       });
     //LIST OF ROLES
 
     $http
-      .get("/api/v2/rules/roles/" + $scope.sessionid)
+      .get('/api/v2/rules/roles/' + $scope.sessionid)
       .success(function (objs) {
         $scope.roles = objs;
-        console.log("Is bringing the roles ", $scope.roles);
+        console.log('Is bringing the roles ', $scope.roles);
       })
       .error(function (error) {
-        console.log("Error: " + error);
+        console.log('Error: ' + error);
       });
 
     //PREVIEW RULES
@@ -398,7 +398,7 @@ app.controller(
           $scope.sessionid = dataObj.id_session;
         })
         .error((data) => {
-          console.log("Error: " + data);
+          console.log('Error: ' + data);
         });
     };
 
@@ -414,23 +414,23 @@ app.controller(
       $scope.HelpImage = $scope.HelpImage = true;
 
       if ($scope.typeRule == 1) {
-        $scope.path = pathHelp + "1.png";
+        $scope.path = pathHelp + '1.png';
       }
       if ($scope.typeRule == 2) {
-        $scope.path = pathHelp + "2.png";
+        $scope.path = pathHelp + '2.png';
       }
       if ($scope.typeRule == 3) {
-        $scope.path = pathHelp + "3.png";
+        $scope.path = pathHelp + '3.png';
       }
       if ($scope.typeRule == 5) {
-        $scope.path = pathHelp + "5.png";
+        $scope.path = pathHelp + '5.png';
       }
     };
 
     $scope.hidePopover = function () {
       $scope.HelpImage = $scope.HelpImage = false;
-      $scope.HelpImage = "";
-      $scope.path = "";
+      $scope.HelpImage = '';
+      $scope.path = '';
     };
 
     //function Roles
@@ -438,14 +438,14 @@ app.controller(
       console.log(optionTrack);
       if (optionTrack == 1) {
         console.log(
-          "All will be tracked a full social network graph will be generated"
+          'All will be tracked a full social network graph will be generated'
         );
-        $scope.selectedRole = $scope.selectedRole = "";
+        $scope.selectedRole = $scope.selectedRole = '';
         $scope.rolesDiv = $scope.rolesDiv = false;
       }
       if (optionTrack == 2) {
         $scope.rolesDiv = $scope.rolesDiv = true;
-        console.log("Ego network");
+        console.log('Ego network');
       }
     };
 
@@ -487,34 +487,34 @@ app.controller(
 
     //ADD NEW RULE
     $scope.AddNewRule = function (type, first, causality, second) {
-      console.log("Which value?? ", $scope.selectedRole);
-      var magnitude = "";
-      var value = "";
+      console.log('Which value?? ', $scope.selectedRole);
+      var magnitude = '';
+      var value = '';
       if (causality == 1) {
-        causality = "After";
+        causality = 'After';
       }
       if (causality == 2) {
-        causality = "Before";
+        causality = 'Before';
       }
       if (type == 1) {
-        magnitude = "Sequence";
+        magnitude = 'Sequence';
         value = causality;
       }
       if (type == 2) {
-        magnitude = "Time";
+        magnitude = 'Time';
         value = $scope.TimeFrame;
       }
       if (type == 3) {
-        magnitude = "Frequency";
+        magnitude = 'Frequency';
         value = $scope.Frequency;
       }
       if (type == 5 && $scope.optionTrack == 2) {
-        magnitude = "Proximity";
+        magnitude = 'Proximity';
         value = $scope.selectedRole;
       }
       if (type == 5 && $scope.optionTrack == 1) {
-        magnitude = "Proximity";
-        value = "All";
+        magnitude = 'Proximity';
+        value = 'All';
       }
 
       const dataObjRule = {
@@ -531,24 +531,24 @@ app.controller(
       //console.log(dataObjRule);
       //insert new rule
       $http
-        .post("/api/v2/rules/addRule/", dataObjRule)
+        .post('/api/v2/rules/addRule/', dataObjRule)
         .success(function (allrules) {
           $scope.IsVisible = false;
           $scope.IsVisibleTime = false;
-          $scope.Name = "";
-          $scope.TimeFrame = "";
-          $scope.Frequency = "";
-          $scope.inputIfCorrect = "";
-          $scope.inputIfWrong = "";
-          $scope.selectedFirst = "";
-          $scope.selectedSecond = "";
-          $scope.causality = "";
+          $scope.Name = '';
+          $scope.TimeFrame = '';
+          $scope.Frequency = '';
+          $scope.inputIfCorrect = '';
+          $scope.inputIfWrong = '';
+          $scope.selectedFirst = '';
+          $scope.selectedSecond = '';
+          $scope.causality = '';
           $scope.sessionRules = allrules;
-          $scope.optionTrack = "";
-          $scope.selectedRole = "";
+          $scope.optionTrack = '';
+          $scope.selectedRole = '';
         })
         .error(function (error) {
-          console.log("Error: " + error);
+          console.log('Error: ' + error);
         });
     };
 
@@ -562,12 +562,12 @@ app.controller(
         id_rule: idRule,
       };
       $http
-        .post("/api/v2/rules/delete/", dataObj)
+        .post('/api/v2/rules/delete/', dataObj)
         .success((allRules) => {
           $scope.sessionRules = allRules;
         })
         .error((data) => {
-          console.log("Error: " + data);
+          console.log('Error: ' + data);
         });
     };
 
@@ -575,22 +575,22 @@ app.controller(
 
     $scope.seeTimeline = () => {
       $scope.timeline = true;
-      console.log("In the app.js ", $scope.sessionid);
+      console.log('In the app.js ', $scope.sessionid);
       //var id_session = parseInt(current_url.split("/").slice(-1));
       //console.log('In the app.js ', $scope.sessionid, id_session);
       //id = $scope.sessionid;
       var dataObj = {
         id: $scope.sessionid,
       };
-      console.log("In the Obj ", dataObj.id);
+      console.log('In the Obj ', dataObj.id);
 
       $http
-        .get("/api/v1/visualisations/getJsonFromFile/" + dataObj.id, dataObj)
+        .get('/api/v1/visualisations/getJsonFromFile/' + dataObj.id, dataObj)
         .success(function (alldata) {
           $scope.alldata = alldata;
         })
         .error(function (error) {
-          console.log("Error: ", error);
+          console.log('Error: ', error);
         });
     };
 
@@ -600,88 +600,88 @@ app.controller(
         id_session: $scope.sessionid,
       };
       $http
-        .post("/api/v1/sessions/stop", dataObj)
+        .post('/api/v1/sessions/stop', dataObj)
         .success(function (data) {
-          $location.path("/");
+          $location.path('/');
           console.log(data);
           $scope.sourceSession = data;
         })
         .error((error) => {
-          console.log("Error: " + error);
+          console.log('Error: ' + error);
         });
     };
   }
 );
 
 app.controller(
-  "manageVis",
+  'manageVis',
   function ($scope, $location, $routeParams, $http, socket) {
     $scope.sessionid = $routeParams.id;
     $scope.nparticipants = 0;
     var containers = [];
     //GET ALL RULES OF A SESSION
     $http
-      .get("/api/v2/rules/all/" + $scope.sessionid)
+      .get('/api/v2/rules/all/' + $scope.sessionid)
       .success(function (data) {
         $scope.sessionRules = data;
         //$window.location.href='http://localhost:3000/timeline/'+sessionID;
       })
       .error(function (error) {
-        console.log("Error: " + error);
+        console.log('Error: ' + error);
       });
 
     //from here
     $scope.timeline = true;
-    console.log("In the app.js session id: ", $scope.sessionid);
+    console.log('In the app.js session id: ', $scope.sessionid);
     var dataObj1 = {
       id: $scope.sessionid,
     };
-    console.log("In the Obj ", dataObj1.id);
+    console.log('In the Obj ', dataObj1.id);
 
     var dataObj = {
       id_session: $scope.sessionid,
     };
     $http
-      .post("/api/v1/visualisations/getDataforVis", dataObj)
+      .post('/api/v1/visualisations/getDataforVis', dataObj)
       .success(function (data) {
         $http
-          .post("/api/v1/visualisations/generateJson2", data)
+          .post('/api/v1/visualisations/generateJson2', data)
           .success(function (objs) {
             $http
               .get(
-                "/api/v1/visualisations/getJsonFromFile/" + dataObj1.id,
+                '/api/v1/visualisations/getJsonFromFile/' + dataObj1.id,
                 dataObj1
               )
               .success(function (alldata) {
                 $scope.alldata = alldata;
               })
               .error(function (error) {
-                console.log("Error: ", error);
+                console.log('Error: ', error);
               });
           })
           .error(function (error) {
-            console.log("Error: " + error);
+            console.log('Error: ' + error);
           });
       })
       .error(function (error) {
-        console.log("Error: " + error);
+        console.log('Error: ' + error);
       });
     // to this point
 
     $scope.seeVis = (rulesID) => {
       //$scope.vis = true;
       //$location.path('/timeline/'+sessionID);
-      console.log("seeVis session id:", $scope.sessionid);
-      console.log("seeVis rule id:", rulesID);
+      console.log('seeVis session id:', $scope.sessionid);
+      console.log('seeVis rule id:', rulesID);
 
       var dataObj = {
         id_session: $scope.sessionid,
         id_rule: rulesID,
       };
-      console.log("####### HERE: ", $scope);
+      console.log('####### HERE: ', $scope);
 
       $http
-        .post("/api/v1/visualisations/getDataforVis", dataObj)
+        .post('/api/v1/visualisations/getDataforVis', dataObj)
         .success(function (dataActions) {
           console.log(dataActions);
           //$scope.dataForVis = dataActions;
@@ -696,28 +696,28 @@ app.controller(
                 rule: detailRule,
               };
               $http
-                .post("/api/v2/rules/validateRule/" + rulesID, toSend)
+                .post('/api/v2/rules/validateRule/' + rulesID, toSend)
                 .success(function (objs) {
                   $scope.rulesVal = objs;
-                  console.log("I am in the nested call");
+                  console.log('I am in the nested call');
                 })
                 .error(function (error) {
-                  console.log("Error: ", error);
+                  console.log('Error: ', error);
                 });
             })
             .error(function (error) {
-              console.log("Error: ", error);
+              console.log('Error: ', error);
             });
         })
         .error(function (error) {
-          console.log("Error: ", error);
+          console.log('Error: ', error);
         });
     };
 
     //create the networks according to  the data
     $scope.createNetwork = (idRule) => {
-      console.log("Session for network: ", $scope.sessionid);
-      console.log("Rule for network: ", idRule);
+      console.log('Session for network: ', $scope.sessionid);
+      console.log('Rule for network: ', idRule);
 
       //GET GRAPH
       $http
@@ -729,12 +729,12 @@ app.controller(
           //$http.get('path/to/service', {timeout: 5000});
           $scope.graph = $scope.graph = true;
           $scope.textgraph =
-            data.rule[0].first_action + "  -  " + data.rule[0].second_action;
+            data.rule[0].first_action + '  -  ' + data.rule[0].second_action;
           $scope.graphPath = data.path;
-          message = "<span>" + data.message + "</span>";
+          message = '<span>' + data.message + '</span>';
           //const parser = new DOMParser();
           //message = parser.parseFromString(message, 'text/html');
-          console.log("Thisa is parsed", message);
+          console.log('Thisa is parsed', message);
           //console.log('Parser', parser)
           $scope.myFeedback = message;
 
@@ -743,79 +743,79 @@ app.controller(
           //$window.location.href='http://localhost:3000/timeline/'+sessionID;
         })
         .error(function (error) {
-          console.log("Error: " + error);
+          console.log('Error: ' + error);
         });
     };
   }
 );
 
 app.controller(
-  "visController",
+  'visController',
   function ($scope, $location, $routeParams, $http, socket) {
     $scope.sessionid = $routeParams.id;
     $scope.nparticipants = 0;
     var containers = [];
 
-    wrapper = document.getElementById("timelines");
+    wrapper = document.getElementById('timelines');
     var dataObj = {
       id_session: $scope.sessionid,
     };
     $http
-      .post("/api/v1/visualisations/getDataforVis", dataObj)
+      .post('/api/v1/visualisations/getDataforVis', dataObj)
       .success(function (data) {
         $http
-          .post("/api/v1/visualisations/generateJson", data)
+          .post('/api/v1/visualisations/generateJson', data)
           .success(function (objs) {
             //$scope.nparticipants = objs.n;
             //$scope.selectedactions = objs;
             //$location.path('/timelines.html');
           })
           .error(function (error) {
-            console.log("Error: " + error);
+            console.log('Error: ' + error);
           });
       })
       .error(function (error) {
-        console.log("Error: " + error);
+        console.log('Error: ' + error);
       });
   }
 );
 
 app.controller(
-  "sessionController",
+  'sessionController',
   function ($scope, $location, $routeParams, $http, socket) {
     $scope.formData = {};
     $scope.sessionData = {};
     // Create a new session
     $scope.createSession = function () {
       $http
-        .post("/api/v1/sessions/create", $scope.formData)
+        .post('/api/v1/sessions/create', $scope.formData)
         .success(function (data) {
           $scope.formData = {};
           $scope.sessionData = data;
           console.log(data.id);
-          $location.path("/actions/" + data.id);
+          $location.path('/actions/' + data.id);
         })
         .error((error) => {
-          console.log("Error: " + error);
+          console.log('Error: ' + error);
         });
     };
     // Delete a todo
     $scope.deleteSession = (sessionID) => {
       $http
-        .delete("/api/v1/session/delete" + sessionID)
+        .delete('/api/v1/session/delete' + sessionID)
         .success((data) => {
           $scope.todoData = data;
           console.log(data);
         })
         .error((data) => {
-          console.log("Error: " + data);
+          console.log('Error: ' + data);
         });
     };
   }
 );
 
 app.controller(
-  "actionsController",
+  'actionsController',
   function ($window, $scope, $location, $route, $routeParams, $http, socket) {
     $scope.actionData = {};
     $scope.objectData = {};
@@ -829,33 +829,33 @@ app.controller(
 
     //get all actions that were selected to this session
     $http
-      .post("/api/v1/actions/allactionssession/", dataObj)
+      .post('/api/v1/actions/allactionssession/', dataObj)
       .success(function (actionspersession) {
         $scope.actionData = actionspersession;
         console.log(actionspersession);
       })
       .error(function (error) {
-        console.log("Error: " + error);
+        console.log('Error: ' + error);
       });
 
     //this gets all actions that has an object associated (has been logged by user)
     $http
-      .post("/api/v1/actions/actionswithobjects", dataObj)
+      .post('/api/v1/actions/actionswithobjects', dataObj)
       .success(function (objs) {
         $scope.selectedactions = objs;
         console.log(objs);
       })
       .error(function (error) {
-        console.log("Error: " + error);
+        console.log('Error: ' + error);
       });
     //getStudentsperSession
     $http
-      .get("/api/v1/objects/studentsession/" + $scope.sessionid)
+      .get('/api/v1/objects/studentsession/' + $scope.sessionid)
       .success(function (objs) {
         $scope.objectData = objs;
       })
       .error(function (error) {
-        console.log("Error: " + error);
+        console.log('Error: ' + error);
       });
 
     $scope.logActionObject = function (objID, actsessionID, actID, actDesc) {
@@ -869,13 +869,13 @@ app.controller(
       //console.log(dataObj);
       //add action-session-object
       $http
-        .post("/api/v1/actions/addactionsectionobject", dataObj)
+        .post('/api/v1/actions/addactionsectionobject', dataObj)
         .success(function (data) {
           $scope.selectedactions = data;
           console.log(data);
         })
         .error((error) => {
-          console.log("Error: " + error);
+          console.log('Error: ' + error);
         });
     }; //end log
 
@@ -888,13 +888,13 @@ app.controller(
       console.log(dataObj);
       //add action-session-object
       $http
-        .post("/api/v1/actions/addstartstopaction", dataObj)
+        .post('/api/v1/actions/addstartstopaction', dataObj)
         .success(function (data) {
           $scope.selectedactions = data;
           console.log(data);
         })
         .error((error) => {
-          console.log("Error: " + error);
+          console.log('Error: ' + error);
         });
     }; //end log
 
@@ -905,12 +905,12 @@ app.controller(
       };
       //console.log(dataObj);
       $http
-        .post("/api/v1/actions/deleteactionobject", dataObj)
+        .post('/api/v1/actions/deleteactionobject', dataObj)
         .success(function (data) {
           $scope.selectedactions = data;
         })
         .error((error) => {
-          console.log("Error: " + error);
+          console.log('Error: ' + error);
         });
     }; //end delete
 
@@ -924,23 +924,23 @@ app.controller(
       //console.log(dataObj);
       //update action session object with notes
       $http
-        .post("/api/v1/actions/updatenotes", dataObj)
+        .post('/api/v1/actions/updatenotes', dataObj)
         .success(function (data) {
           //$scope.selectedactions = data;
           //console.log(data);
           $http
-            .post("/api/v1/actions/getnotebyid", dataObj)
+            .post('/api/v1/actions/getnotebyid', dataObj)
             .success(function (data) {
               //$scope.selectedactions = data;
               console.log(data);
               $scope.fNotes[actSessObjID] = data.notes;
             })
             .error((error) => {
-              console.log("Error: " + error);
+              console.log('Error: ' + error);
             });
         })
         .error((error) => {
-          console.log("Error: " + error);
+          console.log('Error: ' + error);
         });
     }; //end update note
 
@@ -953,14 +953,14 @@ app.controller(
       //console.log(dataObj);
       //get note
       $http
-        .post("/api/v1/actions/getnotebyid", dataObj)
+        .post('/api/v1/actions/getnotebyid', dataObj)
         .success(function (data) {
           //$scope.selectedactions = data;
           console.log(data);
           $scope.fNotes[actSessObjID] = data.notes;
         })
         .error((error) => {
-          console.log("Error: " + error);
+          console.log('Error: ' + error);
         });
     }; //end get name
 
@@ -971,31 +971,31 @@ app.controller(
         id_session: sessionID,
       };
       $http
-        .post("/api/v1/visualisations/getDataforVis", dataObj)
+        .post('/api/v1/visualisations/getDataforVis', dataObj)
         .success(function (data) {
           console.log(data);
           $http
-            .post("/api/v1/visualisations/generateJson2", data)
+            .post('/api/v1/visualisations/generateJson2', data)
             .success(function (objs) {
               //$scope.nparticipants = objs.n;
               //$scope.selectedactions = objs;
-              console.log("http://localhost:3000/timeline/" + sessionID);
+              console.log('http://localhost:3000/timeline/' + sessionID);
               $window.location.href =
-                "http://localhost:3000/timeline/" + sessionID;
+                'http://localhost:3000/timeline/' + sessionID;
             })
             .error(function (error) {
-              console.log("Error: " + error);
+              console.log('Error: ' + error);
             });
         })
         .error(function (error) {
-          console.log("Error: " + error);
+          console.log('Error: ' + error);
         });
     }; //end function
   }
 ); //end controller
 
 app.controller(
-  "mediaController",
+  'mediaController',
   function ($scope, $location, $routeParams, $http) {
     $scope.sourceSession = {};
     $scope.sourceData = {};
@@ -1003,32 +1003,32 @@ app.controller(
     $scope.sessionid = $routeParams.id;
     // Get all sessions
     $http
-      .get("/api/v1/media/all")
+      .get('/api/v1/media/all')
       .success(function (data) {
         $scope.sourceData = data;
       })
       .error(function (error) {
-        console.log("Error: " + error);
+        console.log('Error: ' + error);
       });
     //get all sources by session
     $http
-      .get("/api/v1/media/datasession/" + $scope.sessionid)
+      .get('/api/v1/media/datasession/' + $scope.sessionid)
       .success(function (datapersession) {
         $scope.sourceSession = datapersession;
       })
       .error(function (error) {
-        console.log("Error: " + error);
+        console.log('Error: ' + error);
       });
 
     //get all trackers=empatica serials
     $http
-      .get("/api/v1/objects/trackers/" + "empatica")
+      .get('/api/v1/objects/trackers/' + 'empatica')
       .success(function (tracker) {
         $scope.trackers_empatica = tracker;
         //console.log($scope.trackers_empatica);
       })
       .error(function (error) {
-        console.log("Error: " + error);
+        console.log('Error: ' + error);
       });
 
     // add source media to database
@@ -1042,7 +1042,7 @@ app.controller(
       };
 
       $http
-        .post("/api/v1/media/datasession", dataObj)
+        .post('/api/v1/media/datasession', dataObj)
         .success(function (data) {
           if (data.length == 0) {
             id_source_session = 1;
@@ -1055,26 +1055,26 @@ app.controller(
             id_session: $scope.sessionid,
             id_datatype: sourceId,
             id_datatype_session: id_source_session,
-            name: sourceName + "-" + id_source_session,
+            name: sourceName + '-' + id_source_session,
           };
           $http
-            .post("/api/v1/media/addsourceSession", dataObj)
+            .post('/api/v1/media/addsourceSession', dataObj)
             .success(function (data) {
               $scope.sourceSession = data;
               id_source_session = 0;
             })
             .error((error) => {
-              console.log("Error: " + error);
+              console.log('Error: ' + error);
             });
         })
         .error((error) => {
-          console.log("Error: " + error);
+          console.log('Error: ' + error);
         });
     };
 
     //redirect to assign Objects to session
     $scope.assignObjects = function () {
-      $location.path("/objects/" + $scope.sessionid);
+      $location.path('/objects/' + $scope.sessionid);
     };
 
     //added 30-04-2019
@@ -1086,13 +1086,13 @@ app.controller(
       };
       //console.log(dataObj);
       $http
-        .post("/api/v1/media/deletesourcesession", dataObj)
+        .post('/api/v1/media/deletesourcesession', dataObj)
         .success(function (data) {
           $scope.sourceSession = data;
           //console.log(data);
         })
         .error((error) => {
-          console.log("Error: " + error);
+          console.log('Error: ' + error);
         });
     }; //end log
 
@@ -1106,19 +1106,19 @@ app.controller(
       };
 
       $http
-        .post("/api/v1/media/updateempatica", dataObj)
+        .post('/api/v1/media/updateempatica', dataObj)
         .success(function (data) {
           //$scope.objectsperSessionData = data;
         })
         .error((error) => {
-          console.log("Error: " + error);
+          console.log('Error: ' + error);
         });
     }; //end updatewristband
   }
 ); //end controller
 
 app.controller(
-  "objectsController",
+  'objectsController',
   function ($scope, $location, $routeParams, $http) {
     $scope.objectsData = {};
     $scope.objectsperSessionData = {};
@@ -1128,54 +1128,54 @@ app.controller(
     $scope.fObjectName = [];
     // Get all objects
     $http
-      .get("/api/v1/objects/all")
+      .get('/api/v1/objects/all')
       .success(function (data) {
         $scope.objectsData = data;
       })
       .error(function (error) {
-        console.log("Error: " + error);
+        console.log('Error: ' + error);
       });
     //get all objects per session
     $http
-      .get("/api/v1/objects/objectsession/" + $scope.sessionid)
+      .get('/api/v1/objects/objectsession/' + $scope.sessionid)
       .success(function (datapersession) {
         $scope.objectsperSessionData = datapersession;
 
         //$scope.x=datapersession.coordinates.split(',')[0];
-        console.log("Session objects: ", datapersession);
+        console.log('Session objects: ', datapersession);
       })
       .error(function (error) {
-        console.log("Error: " + error);
+        console.log('Error: ' + error);
       });
 
     //get all trackers=pozyx serials
     var dataObj = {
       id_session: $scope.sessionid,
-      type: "pozyx",
+      type: 'pozyx',
     };
     $http
-      .post("/api/v1/objects/trackers/", dataObj)
+      .post('/api/v1/objects/trackers/', dataObj)
       .success(function (tracker) {
         $scope.trackers_pozyx = tracker;
         //console.log($scope.trackers_pozyx);
       })
       .error(function (error) {
-        console.log("Error: " + error);
+        console.log('Error: ' + error);
       });
 
     //get all trackers=empatica serials
     var dataObj = {
       id_session: $scope.sessionid,
-      type: "empatica",
+      type: 'empatica',
     };
     $http
-      .post("/api/v1/objects/trackers/", dataObj)
+      .post('/api/v1/objects/trackers/', dataObj)
       .success(function (tracker) {
         $scope.trackers_empatica = tracker;
         //console.log($scope.trackers_empatica);
       })
       .error(function (error) {
-        console.log("Error: " + error);
+        console.log('Error: ' + error);
       });
 
     // add source media to database
@@ -1187,21 +1187,21 @@ app.controller(
         name: objName,
       };
       $http
-        .post("/api/v1/objects/countobjssession", dataObj)
+        .post('/api/v1/objects/countobjssession', dataObj)
         .success(function (objNname) {
           dataObj.name = objNname;
 
           $http
-            .post("/api/v1/objects/addobjsession", dataObj)
+            .post('/api/v1/objects/addobjsession', dataObj)
             .success(function (datapersession) {
               $scope.objectsperSessionData = datapersession;
             })
             .error((error) => {
-              console.log("Error: " + error);
+              console.log('Error: ' + error);
             });
         })
         .error((error) => {
-          console.log("Error: " + error);
+          console.log('Error: ' + error);
         });
     };
 
@@ -1211,16 +1211,16 @@ app.controller(
         id_session: $scope.sessionid,
         id_objs: objsId,
         serial: item,
-        type: "pozyx",
+        type: 'pozyx',
       };
 
       $http
-        .post("/api/v1/objects/updateserial", dataObj)
+        .post('/api/v1/objects/updateserial', dataObj)
         .success(function (data) {
           //$scope.objectsperSessionData = data;
         })
         .error((error) => {
-          console.log("Error: " + error);
+          console.log('Error: ' + error);
         });
     }; //end update
 
@@ -1230,16 +1230,16 @@ app.controller(
         id_session: $scope.sessionid,
         id_objs: objsId,
         serial: item,
-        type: "empatica",
+        type: 'empatica',
       };
 
       $http
-        .post("/api/v1/objects/updateserial", dataObj)
+        .post('/api/v1/objects/updateserial', dataObj)
         .success(function (data) {
           //$scope.objectsperSessionData = data;
         })
         .error((error) => {
-          console.log("Error: " + error);
+          console.log('Error: ' + error);
         });
     }; //end updatewristband
 
@@ -1253,12 +1253,12 @@ app.controller(
       };
 
       $http
-        .post("/api/v1/objects/updateobjname", dataObj)
+        .post('/api/v1/objects/updateobjname', dataObj)
         .success(function (data) {
           $scope.objectsperSessionData = data;
         })
         .error((error) => {
-          console.log("Error: " + error);
+          console.log('Error: ' + error);
         });
     }; //end updateObjectName
 
@@ -1272,12 +1272,12 @@ app.controller(
       };
 
       $http
-        .post("/api/v1/objects/updateobjcoordinates", dataObj)
+        .post('/api/v1/objects/updateobjcoordinates', dataObj)
         .success(function (data) {
           $scope.objectsperSessionData = data;
         })
         .error((error) => {
-          console.log("Error: " + error);
+          console.log('Error: ' + error);
         });
     }; //end updateObjectName
 
@@ -1289,53 +1289,53 @@ app.controller(
       };
       //console.log(dataObj);
       $http
-        .post("/api/v1/objects/deleteobjectsession", dataObj)
+        .post('/api/v1/objects/deleteobjectsession', dataObj)
         .success(function (data) {
           $scope.objectsperSessionData = data;
           //console.log(data);
         })
         .error((error) => {
-          console.log("Error: " + error);
+          console.log('Error: ' + error);
         });
     }; //end log
 
     $scope.controlSources = function () {
-      $location.path("/manage/" + $scope.sessionid);
+      $location.path('/manage/' + $scope.sessionid);
     };
   }
 ); //end controller
 
 app.controller(
-  "manageSourcesController",
+  'manageSourcesController',
   function ($scope, $location, $routeParams, $http, socket) {
     $scope.sourceSession = {};
     $scope.sessionid = $routeParams.id;
     //get all sources by session
     $http
-      .get("/api/v1/media/datasession/" + $scope.sessionid)
+      .get('/api/v1/media/datasession/' + $scope.sessionid)
       .success(function (datapersession) {
         $scope.sourceSession = datapersession;
         //console.log(datapersession);
       })
       .error(function (error) {
-        console.log("Error: " + error);
+        console.log('Error: ' + error);
       });
 
     const mediaStreamConstraints = { video: true, audio: false };
-    const localVideo = document.getElementById("mainvideo");
+    const localVideo = document.getElementById('mainvideo');
     let localStream;
 
     function gotLocalMediaStream(mediaStream) {
       localStream = mediaStream;
       localVideo.srcObject = mediaStream;
 
-      console.log("helloworld");
+      console.log('helloworld');
       const videoTracks = localStream.getVideoTracks();
       console.log(`video name: ${videoTracks[0].label}`);
     }
 
     function handleLocalMediaStreamError(error) {
-      console.log("navigator.getUserMedia error", error);
+      console.log('navigator.getUserMedia error', error);
     }
     navigator.mediaDevices
       .getUserMedia(mediaStreamConstraints)
@@ -1358,30 +1358,30 @@ app.controller(
       var sec = Math.floor(secs - hr * 3600 - min * 60);
 
       if (min < 10) {
-        min = "0" + min;
+        min = '0' + min;
       }
 
       if (sec < 10) {
-        sec = "0" + sec;
+        sec = '0' + sec;
       }
 
       if (hr <= 0) {
-        return min + ":" + sec;
+        return min + ':' + sec;
       }
 
-      return hr + ":" + min + ":" + sec;
+      return hr + ':' + min + ':' + sec;
     }
 
     var totalTime = 60;
     var segmentTime = 5;
 
     $scope.startAll = function (sessionId) {
-      console.log("start all");
+      console.log('start all');
       var oReq = new XMLHttpRequest();
-      oReq.open("GET", "http://localhost:7501/audio/start/" + sessionId, true);
-      oReq.setRequestHeader("Access-Control-Allow-Origin", "http://localhost");
+      oReq.open('GET', 'http://localhost:7501/audio/start/' + sessionId, true);
+      oReq.setRequestHeader('Access-Control-Allow-Origin', 'http://localhost');
       oReq.send();
-      console.log("audio has started");
+      console.log('audio has started');
       // $http
       //   .get("localhost:7501/audio/start/" + sessionId)
       //   .success(function (objs) {
@@ -1394,14 +1394,14 @@ app.controller(
       //   });
 
       // 防止多次启动报错
-      if (mediaRecorder && mediaRecorder.state === "recording") {
+      if (mediaRecorder && mediaRecorder.state === 'recording') {
         return;
       }
 
       buffer = [];
 
       var options = {
-        mimeType: "video/webm;codecs=vp8",
+        mimeType: 'video/webm;codecs=vp8',
       };
 
       if (!MediaRecorder.isTypeSupported(options.mimeType)) {
@@ -1412,7 +1412,7 @@ app.controller(
       try {
         mediaRecorder = new MediaRecorder(localVideo.srcObject, options);
       } catch (e) {
-        console.error("Failed to create MediaRecorder:", e);
+        console.error('Failed to create MediaRecorder:', e);
         return;
       }
 
@@ -1426,8 +1426,8 @@ app.controller(
       clearInterval(timer);
       timer = setInterval(function () {
         var seconds = (new Date().getTime() - dateStarted) / 1000;
-        document.querySelector("h1").innerHTML =
-          "Recording Duration: " + calculateTimeDuration(seconds);
+        document.querySelector('h1').innerHTML =
+          'Recording Duration: ' + calculateTimeDuration(seconds);
 
         console.log(parseInt(seconds));
         if (parseInt(seconds) === totalTime) {
@@ -1436,24 +1436,24 @@ app.controller(
 
         if (parseInt(seconds) % segmentTime === 0) {
           console.log(buffer);
-          console.log("send times :" + parseInt(seconds) / segmentTime);
+          console.log('send times :' + parseInt(seconds) / segmentTime);
           var tempbuffer = buffer;
 
           var oReq = new XMLHttpRequest();
           oReq.open(
-            "POST",
-            "http://localhost:7101/receive/" + parseInt(seconds) / segmentTime,
+            'POST',
+            'http://localhost:7101/receive/' + parseInt(seconds) / segmentTime,
             true
           );
           oReq.setRequestHeader(
-            "Access-Control-Allow-Origin",
-            "http://localhost"
+            'Access-Control-Allow-Origin',
+            'http://localhost'
           );
-          var blob = new Blob(tempbuffer, { type: "video/webm" });
+          var blob = new Blob(tempbuffer, { type: 'video/webm' });
           oReq.send(blob);
           oReq.onreadystatechange = function () {
-            console.log("oReq readyState:" + oReq.readyState);
-            console.log("oReq status:" + oReq.status);
+            console.log('oReq readyState:' + oReq.readyState);
+            console.log('oReq status:' + oReq.status);
             if (oReq.readyState === 4 && oReq.status === 200) {
               console.log(oReq.responseText);
             }
@@ -1463,36 +1463,36 @@ app.controller(
         }
       }, 1000);
 
-      console.log("recording start");
+      console.log('recording start');
     };
 
     $scope.stopAll = function (sessionId) {
       $http
-        .get("localhost:7301/bio/stop")
+        .get('localhost:7301/bio/stop')
         .success(function (objs) {
           // $scope.actionData = objs;
           console.log(objs);
         })
         .error(function (error) {
-          console.log("Error: " + error);
+          console.log('Error: ' + error);
         });
       $http
-        .get("localhost:7201/video/stop")
+        .get('localhost:7201/video/stop')
         .success(function (objs) {
           // $scope.actionData = objs;
           console.log(objs);
         })
         .error(function (error) {
-          console.log("Error: " + error);
+          console.log('Error: ' + error);
         });
       $http
-        .get("localhost:7101/pos/stop")
+        .get('localhost:7101/pos/stop')
         .success(function (objs) {
           // $scope.actionData = objs;
           console.log(objs);
         })
         .error(function (error) {
-          console.log("Error: " + error);
+          console.log('Error: ' + error);
         });
     };
 
@@ -1506,7 +1506,7 @@ app.controller(
       //if datatypeId is pozyx
       if (datatypeId == 1) {
         $http
-          .post("/api/v1/media/updateSourceSession", dataObj)
+          .post('/api/v1/media/updateSourceSession', dataObj)
           .success(function (data) {
             console.log(data);
             $scope.sourceSession = data;
@@ -1518,38 +1518,38 @@ app.controller(
               });*/
           })
           .error((error) => {
-            console.log("Error: " + error);
+            console.log('Error: ' + error);
           });
       } //end if
       else if (datatypeId == 4) {
-        console.log("manikin");
+        console.log('manikin');
         $http
-          .post("/api/v1/media/updateSourceSession", dataObj)
+          .post('/api/v1/media/updateSourceSession', dataObj)
           .success(function (data) {
             console.log(data);
             $scope.sourceSession = data;
             $http
-              .post("api/v1/actions/startActionsCapture", {
+              .post('api/v1/actions/startActionsCapture', {
                 id_session: sessionId,
               })
               .success(function () {})
               .error((error) => {
-                console.log("Error: " + error);
+                console.log('Error: ' + error);
               });
           })
           .error((error) => {
-            console.log("Error: " + error);
+            console.log('Error: ' + error);
           });
       } //end if
       else {
         $http
-          .post("/api/v1/media/updateSourceSession", dataObj)
+          .post('/api/v1/media/updateSourceSession', dataObj)
           .success(function (data) {
             console.log(data);
             $scope.sourceSession = data;
           })
           .error((error) => {
-            console.log("Error: " + error);
+            console.log('Error: ' + error);
           });
       } //end else
     };
@@ -1564,7 +1564,7 @@ app.controller(
       //datatypeId == 1 - pozyx
       if (datatypeId == 1) {
         $http
-          .post("/api/v1/media/updateSourceSession", dataObj)
+          .post('/api/v1/media/updateSourceSession', dataObj)
           .success(function (data) {
             console.log(data);
             $scope.sourceSession = data;
@@ -1580,18 +1580,18 @@ app.controller(
                 });*/
           })
           .error((error) => {
-            console.log("Error: " + error);
+            console.log('Error: ' + error);
           });
       } //end if
       else if (datatypeId == 4) {
         $http
-          .post("/api/v1/media/updateSourceSession", dataObj)
+          .post('/api/v1/media/updateSourceSession', dataObj)
           .success(function (data) {
             //console.log(data);
             $scope.sourceSession = data;
 
             $http
-              .post("api/v1/actions/stopActionsCapture", {
+              .post('api/v1/actions/stopActionsCapture', {
                 id_session: sessionId,
               })
               .success(function (data) {
@@ -1599,22 +1599,22 @@ app.controller(
                 //$scope.sourceSession = data;
               })
               .error((error) => {
-                console.log("Error: " + error);
+                console.log('Error: ' + error);
               });
           })
           .error((error) => {
-            console.log("Error: " + error);
+            console.log('Error: ' + error);
           });
       } //end if
       else {
         $http
-          .post("/api/v1/media/updateSourceSession", dataObj)
+          .post('/api/v1/media/updateSourceSession', dataObj)
           .success(function (data) {
             //console.log(data);
             $scope.sourceSession = data;
           })
           .error((error) => {
-            console.log("Error: " + error);
+            console.log('Error: ' + error);
           });
       } //end else
     };
@@ -1638,13 +1638,13 @@ app.controller(
 ); //end controller
 
 app.controller(
-  "actionsessionController",
+  'actionsessionController',
   function ($scope, $location, $routeParams, $http) {
     $scope.addedActions = {};
     $scope.actionData = {};
     $scope.sessionid = $routeParams.id;
     $scope.IsVisible = false;
-    $scope.inputActionName = "";
+    $scope.inputActionName = '';
     $scope.inputActionType = false;
 
     //function to show input
@@ -1653,9 +1653,9 @@ app.controller(
     };
     //function to add a new action to the list
     $scope.AddNewAction = function () {
-      var type = "event";
+      var type = 'event';
       if ($scope.inputActionType == true) {
-        type = "critical";
+        type = 'critical';
       }
       const dataObjAction = {
         newactionname: $scope.inputActionName,
@@ -1664,28 +1664,28 @@ app.controller(
       //console.log(dataObjAction);
       //insert new action
       $http
-        .post("/api/v1/actions/newaction/", dataObjAction)
+        .post('/api/v1/actions/newaction/', dataObjAction)
         .success(function (allactions) {
           $scope.actionData = allactions;
           $scope.IsVisible = false;
-          $scope.inputActionName = "";
+          $scope.inputActionName = '';
           $scope.inputActionType = false;
           //console.log(allactions);
         })
         .error(function (error) {
-          console.log("Error: " + error);
+          console.log('Error: ' + error);
         });
     };
 
     //get all actions
     $http
-      .get("/api/v1/actions/all")
+      .get('/api/v1/actions/all')
       .success(function (objs) {
         $scope.actionData = objs;
         console.log(objs);
       })
       .error(function (error) {
-        console.log("Error: " + error);
+        console.log('Error: ' + error);
       });
 
     var dataObj = {
@@ -1693,13 +1693,13 @@ app.controller(
     };
     //get all actions per session
     $http
-      .post("/api/v1/actions/allactionssession/", dataObj)
+      .post('/api/v1/actions/allactionssession/', dataObj)
       .success(function (actionspersession) {
         $scope.addedActions = actionspersession;
         console.log(actionspersession);
       })
       .error(function (error) {
-        console.log("Error: " + error);
+        console.log('Error: ' + error);
       });
 
     // associate selected actions per session
@@ -1713,25 +1713,25 @@ app.controller(
       };
 
       $http
-        .post("/api/v1/actions/actionsessionexists", dataObj)
+        .post('/api/v1/actions/actionsessionexists', dataObj)
         .success(function (data) {
           if (data == 0) {
             $http
-              .post("/api/v1/actions/addactiontothissession", dataObj)
+              .post('/api/v1/actions/addactiontothissession', dataObj)
               .success(function (data2) {
                 $scope.addedActions = data2;
                 console.log(data2);
               })
               .error((error) => {
-                console.log("Error: " + error);
+                console.log('Error: ' + error);
               });
           } //end if
           else {
-            window.alert("This action was already added to the session");
+            window.alert('This action was already added to the session');
           }
         })
         .error((error) => {
-          console.log("Error: " + error);
+          console.log('Error: ' + error);
         });
     }; //end scope
 
@@ -1743,12 +1743,12 @@ app.controller(
       };
       //console.log(dataObj);
       $http
-        .post("/api/v1/actions/deleteaction", dataObj)
+        .post('/api/v1/actions/deleteaction', dataObj)
         .success(function (data) {
           $scope.actionData = data;
         })
         .error((error) => {
-          console.log("Error: " + error);
+          console.log('Error: ' + error);
         });
     }; //end delete
 
@@ -1759,19 +1759,19 @@ app.controller(
       };
       //console.log(dataObj);
       $http
-        .post("/api/v1/actions/deleteactionsession", dataObj)
+        .post('/api/v1/actions/deleteactionsession', dataObj)
         .success(function (data) {
           $scope.addedActions = data;
           console.log(data);
         })
         .error((error) => {
-          console.log("Error: " + error);
+          console.log('Error: ' + error);
         });
     }; //end log
     //redirect to assign Objects to session
     $scope.assignDataSources = function () {
       //$location.path('/objects/'+$scope.sessionid);
-      $location.path("/media/" + $scope.sessionid);
+      $location.path('/media/' + $scope.sessionid);
     };
     // //redirect to assign Objects to session
     // $scope.assignObjects = function() {
@@ -1780,7 +1780,7 @@ app.controller(
     // List actions
     $scope.listRules = function (sessionID) {
       //alert(sessionID);
-      $location.url("/rules");
+      $location.url('/rules');
     };
   }
 ); //end controller

@@ -77,7 +77,7 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
 }
 
 .hljs-comment {
-  color: #b0d0b0
+  color: #b0d0b0;
 }
 
 .hljs-deletion,

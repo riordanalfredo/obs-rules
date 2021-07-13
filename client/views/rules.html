@@ -1,150 +1,249 @@
-  <div>
-    <h1>Assessment Criteria</h1>
-    <hr>
-  </div>
-  <div class="p-2"> 
-
-  	<div class="pb-2 pt-2 mb-0 small lh-125 border-bottom border-gray" ng-show = "IsVisible">
-
-  		<select style="font-size:15.0pt" ng-init="selectedType = item.name" ng-model="selectedType" ng-change="ShowInputTime(selectedType)">
-        	<option value="">--What to validate?--</option>
-        	<option ng-repeat="x in typeRules" value="{{x.id}}">{{x.name}}</option>
-      </select>
-      <span ng-show = "Help" ng-mouseover="showPopover()" ng-mouseleave="hidePopover()">
-          <img src= './img/help.jpeg' alt="Help" style="width:50px;height:50px;" >
-      </span>
-    </div>
-    <!--<h1>{{typeRule}} </h1>-->
-    <div ng-show = "HelpImage">
-        <img src= {{path}} alt="Help" style="width:1000px;height:800px;">
-    </div>
-
-     <div class="pb-2 pt-2 mb-0 small lh-125 border-bottom border-gray" ng-show = "IsVisibleTime">
-        <span style="color:darkcyan;font-size:15.0pt">Title</span> for this criteria:<br>
-        <input type="text"  ng-model="Name"  style="width: 1050px;">
-        <br>
-        Please select an <span style="color:darkcyan;font-size:15.0pt">action (A)</span> from the list:
-        <select style="width: 700px;font-size:15.0pt" ng-init="selectedFirst = item.action_desc" ng-model="selectedFirst">
-        	<option value="">--Select--</option>
-        	<option ng-repeat="x in actions" value="{{x.id_action}}">{{x.action_desc}}</option>
-      	</select>
-
-      	<div ng-show = "timeR">
-          The previous action happens in a <span style="color:darkcyan;font-size:15.0pt">Time frame</span> of: <input type="text"  ng-model="TimeFrame"> (minutes)
-        </div>
-      	<div ng-show = "causalityR">
-	      	The previous action happens:
-	        <select style="font-size:15.0pt" ng-init="causality = item.action_desc" ng-model="causality">
-	        	<option value="">--Select--</option>
-	        	<option value="1" selected>After</option>
-	        	<!--<option value="2">Before</option>-->
-	      	</select>
-      	</div>
-      	<div ng-show = "frequencyR">
-          The previous action have a <span style="color:darkcyan;font-size:15.0pt">Frequency</span> of: <input type="text"  ng-model="Frequency"> (minutes)
-        </div>
-        <div ng-show="ShowSecond">
-          Please select an <span style="color:darkcyan;font-size:15.0pt">action (B)</span> from the list:
-          <select style="width: 700px;font-size:15.0pt" ng-init="selectedSecond = item.action_desc" ng-model="selectedSecond" >
-            <option value="">--Select--</option>
-            <option ng-repeat="x in actions" value="{{x.id_action}}">{{x.action_desc}}</option>
-          </select>
-        </div>
-        <div ng-show = "proximity">
-          <p>The previos actions will be used as a reference to analyse the proximity of the following roles, from action (A) to action (B):</p>
-          Which <span style="color:darkcyan;font-size:15.0pt">Roles</span> do you want to validate?
-          <select style="width: 700px;font-size:15.0pt" id='optionProximity' ng-model="optionTrack" ng-change="valType(optionTrack)">
-            <option value=1>All of them (e.g. were they together after the handover?) - Full social network</option>
-            <option value=2>Particular role (e.g. were nurses close to the patient when he was asking for help?) - ego network</option>
-          </select>          
-        </div>
-        <div ng-show = "rolesDiv">
-          Choose the <span style="color:darkcyan;font-size:15.0pt">central role</span> you want to validate:
-          <select style="width: 700px;font-size:15.0pt" ng-init="role = item.serial" ng-model="selectedRole">
-            <option value="">--Select the central role in the network--</option>
-            <option ng-repeat="x in roles" value="{{x.serial}}">{{x.name}}-{{x.serial}}</option>
-          </select>
-            <!--<a href="javascript:void(0)" class="btn btn-outline-warning btn-sm" ng-click="addRole(selectedRole)"> Add other role </a>-->
-        </div>
-
-        Feedback if <span style="color:darkcyan;font-size:15.0pt">correct</span>:
-        <br> <textarea type="text"  rows="3" ng-model="inputIfCorrect" cols="130">Type here</textarea>
-        <br>
-        Feedback if <span style="color:darkcyan;font-size:15.0pt">wrong</span>: 
-        <br><textarea type="text" rows="3" ng-model="inputIfWrong" cols="130">Type here</textarea>
-         <br>  
-       	<a href="javascript:void(0)" class="btn btn-outline-warning btn-sm" ng-click="AddNewRule(selectedType, selectedFirst,causality,selectedSecond)"> Save Criteria</a>
-       	<br>	
-    </div>
-	<button type="button" class="btn btn-primary btn-sm" ng-click="ShowInput()"> Add New Criteria </button>
+<div>
+  <h1>Assessment Criteria</h1>
+  <hr />
 </div>
-  	<hr>
-    <p class="lead font-weight-bold">Criteria defined for this session:</p>
-
-	<br/>
-	
-    <div class="pb-2 pt-2 mb-0 small lh-125 border-bottom border-gray" ng-repeat="list in sessionRules">
-      <div class="d-flex justify-content-end align-items-center w-100">
-          <div class="flex-grow-1">
-            <span>{{ list.magnitude }} </span> |
-            <span>{{ list.name }} </span> 
-          </div>
-          <div class=""><a href="javascript:void(0)" class="btn btn-primary btn-sm" ng-click="seeRule(list.id)"> Detail </a></div>
-          <div class=""><a href="javascript:void(0)" class="mx-2 btn btn-warning btn-sm" ng-click="deleteRule(list.id)"> Delete </a></div>
-      </div>
+<div class="p-2">
+  <div
+    class="pb-2 pt-2 mb-0 small lh-125 border-bottom border-gray"
+    ng-show="IsVisible"
+  >
+    <select
+      style="font-size: 15pt"
+      ng-init="selectedType = item.name"
+      ng-model="selectedType"
+      ng-change="ShowInputTime(selectedType)"
+    >
+      <option value="">--What to validate?--</option>
+      <option ng-repeat="x in typeRules" value="{{x.id}}">{{x.name}}</option>
+    </select>
+    <span
+      ng-show="Help"
+      ng-mouseover="showPopover()"
+      ng-mouseleave="hidePopover()"
+    >
+      <img src="./img/help.jpeg" alt="Help" style="width: 50px; height: 50px" />
+    </span>
+  </div>
+  <!--<h1>{{typeRule}} </h1>-->
+  <div ng-show="HelpImage">
+    <img src="{{path}}" alt="Help" style="width: 1000px; height: 800px" />
   </div>
 
-  <hr>
-    <p class="lead font-weight-bold">Detail of the criteria:</p>
+  <div
+    class="pb-2 pt-2 mb-0 small lh-125 border-bottom border-gray"
+    ng-show="IsVisibleTime"
+  >
+    <span style="color: darkcyan; font-size: 15pt">Title</span> for this
+    criteria:<br />
+    <input type="text" ng-model="Name" style="width: 1050px" />
+    <br />
+    Please select an
+    <span style="color: darkcyan; font-size: 15pt">action (A)</span> from the
+    list:
+    <select
+      style="width: 700px; font-size: 15pt"
+      ng-init="selectedFirst = item.action_desc"
+      ng-model="selectedFirst"
+    >
+      <option value="">--Select--</option>
+      <option ng-repeat="x in actions" value="{{x.id_action}}">
+        {{x.action_desc}}
+      </option>
+    </select>
+
+    <div ng-show="timeR">
+      The previous action happens in a
+      <span style="color: darkcyan; font-size: 15pt">Time frame</span> of:
+      <input type="text" ng-model="TimeFrame" /> (minutes)
+    </div>
+    <div ng-show="causalityR">
+      The previous action happens:
+      <select
+        style="font-size: 15pt"
+        ng-init="causality = item.action_desc"
+        ng-model="causality"
+      >
+        <option value="">--Select--</option>
+        <option value="1" selected>After</option>
+        <!--<option value="2">Before</option>-->
+      </select>
+    </div>
+    <div ng-show="frequencyR">
+      The previous action have a
+      <span style="color: darkcyan; font-size: 15pt">Frequency</span> of:
+      <input type="text" ng-model="Frequency" /> (minutes)
+    </div>
+    <div ng-show="ShowSecond">
+      Please select an
+      <span style="color: darkcyan; font-size: 15pt">action (B)</span> from the
+      list:
+      <select
+        style="width: 700px; font-size: 15pt"
+        ng-init="selectedSecond = item.action_desc"
+        ng-model="selectedSecond"
+      >
+        <option value="">--Select--</option>
+        <option ng-repeat="x in actions" value="{{x.id_action}}">
+          {{x.action_desc}}
+        </option>
+      </select>
+    </div>
+    <div ng-show="proximity">
+      <p>
+        The previos actions will be used as a reference to analyse the proximity
+        of the following roles, from action (A) to action (B):
+      </p>
+      Which <span style="color: darkcyan; font-size: 15pt">Roles</span> do you
+      want to validate?
+      <select
+        style="width: 700px; font-size: 15pt"
+        id="optionProximity"
+        ng-model="optionTrack"
+        ng-change="valType(optionTrack)"
+      >
+        <option value="1">
+          All of them (e.g. were they together after the handover?) - Full
+          social network
+        </option>
+        <option value="2">
+          Particular role (e.g. were nurses close to the patient when he was
+          asking for help?) - ego network
+        </option>
+      </select>
+    </div>
+    <div ng-show="rolesDiv">
+      Choose the
+      <span style="color: darkcyan; font-size: 15pt">central role</span> you
+      want to validate:
+      <select
+        style="width: 700px; font-size: 15pt"
+        ng-init="role = item.serial"
+        ng-model="selectedRole"
+      >
+        <option value="">--Select the central role in the network--</option>
+        <option ng-repeat="x in roles" value="{{x.serial}}">
+          {{x.name}}-{{x.serial}}
+        </option>
+      </select>
+      <!--<a href="javascript:void(0)" class="btn btn-outline-warning btn-sm" ng-click="addRole(selectedRole)"> Add other role </a>-->
+    </div>
+
+    Feedback if <span style="color: darkcyan; font-size: 15pt">correct</span>:
+    <br />
+    <textarea type="text" rows="3" ng-model="inputIfCorrect" cols="130">
+Type here</textarea
+    >
+    <br />
+    Feedback if <span style="color: darkcyan; font-size: 15pt">wrong</span>:
+    <br /><textarea type="text" rows="3" ng-model="inputIfWrong" cols="130">
+Type here</textarea
+    >
+    <br />
+    <a
+      href="javascript:void(0)"
+      class="btn btn-outline-warning btn-sm"
+      ng-click="AddNewRule(selectedType, selectedFirst,causality,selectedSecond)"
+    >
+      Save Criteria</a
+    >
+    <br />
+  </div>
+  <button type="button" class="btn btn-primary btn-sm" ng-click="ShowInput()">
+    Add New Criteria
+  </button>
+</div>
+<hr />
+<p class="lead font-weight-bold">Criteria defined for this session:</p>
+
+<br />
+
+<div
+  class="pb-2 pt-2 mb-0 small lh-125 border-bottom border-gray"
+  ng-repeat="list in sessionRules"
+>
+  <div class="d-flex justify-content-end align-items-center w-100">
+    <div class="flex-grow-1">
+      <span>{{ list.magnitude }} </span> |
+      <span>{{ list.name }} </span>
+    </div>
+    <div class="">
+      <a
+        href="javascript:void(0)"
+        class="btn btn-primary btn-sm"
+        ng-click="seeRule(list.id)"
+      >
+        Detail
+      </a>
+    </div>
+    <div class="">
+      <a
+        href="javascript:void(0)"
+        class="mx-2 btn btn-warning btn-sm"
+        ng-click="deleteRule(list.id)"
+      >
+        Delete
+      </a>
+    </div>
+  </div>
+</div>
+
+<hr />
+<p class="lead font-weight-bold">Detail of the criteria:</p>
 
 <!--<h1>{{detailRule}} </h1> -->
- <div class="pb-2 pt-2 mb-0 small lh-125 border-bottom border-gray" ng-repeat="list in detailRule">
-      <div class="d-flex justify-content-end align-items-center w-100">
-          <div class="flex-grow-1">
-            <span>{{ list.name }} </span> |  <span>{{ list.magnitude }} </span> |<br>
-            <span>{{ list.first_action }} </span> - <span style="color:blue">{{ list.value_of_mag }} </span> - <span>{{ list.second_action }} </span> <br>
-            <span style="color:green">{{ list.feedback_ok }} </span> <br>
-            <span style="color:orange">{{ list.feedback_wrong }} </span> <br>
-          </div>
+<div
+  class="pb-2 pt-2 mb-0 small lh-125 border-bottom border-gray"
+  ng-repeat="list in detailRule"
+>
+  <div class="d-flex justify-content-end align-items-center w-100">
+    <div class="flex-grow-1">
+      <span>{{ list.name }} </span> | <span>{{ list.magnitude }} </span> |<br />
+      <span>{{ list.first_action }} </span> -
+      <span style="color: blue">{{ list.value_of_mag }} </span> -
+      <span>{{ list.second_action }} </span> <br />
+      <span style="color: green">{{ list.feedback_ok }} </span> <br />
+      <span style="color: orange">{{ list.feedback_wrong }} </span> <br />
+    </div>
 
-          <!--<div class=""><a href="javascript:void(0)" class="btn btn-primary btn-sm" ng-click="seeVis(list.id)" onclick="gloria()"> Vis </a></div>
+    <!--<div class=""><a href="javascript:void(0)" class="btn btn-primary btn-sm" ng-click="seeVis(list.id)" onclick="gloria()"> Vis </a></div>
           <div class=""><a href="javascript:void(0)" class="btn btn-primary btn-sm" ng-click="seeTimeline()" onclick="gloria()"> Complete Vis </a></div>-->
-      </div>
   </div>
+</div>
 
 <!--<p>{{dataForVis}} <p>{{rulesVal}} </p></p>-->
-  <!--<input id="foo" type="text" value="{{rulesVal}}" />-->
+<!--<input id="foo" type="text" value="{{rulesVal}}" />-->
 
-  <!--<div id="foo" ng-model = "rulesVal"></div>-->
+<!--<div id="foo" ng-model = "rulesVal"></div>-->
 
-  <!--<p id="rules" ng-model = "rulesVal">{{rulesVal}}</p>-->
+<!--<p id="rules" ng-model = "rulesVal">{{rulesVal}}</p>-->
 
-  <p id="rules" ng-model = "alldata"></p>
+<p id="rules" ng-model="alldata"></p>
 
-  <div id="visualisation" ng-show = "vis">
+<div id="visualisation" ng-show="vis"></div>
+<h2 id="title-page"><strong></strong></h2>
+<br />
+<h2 id="rule-name"><strong></strong></h2>
+<div id="timelines" ng-show="timeline"></div>
 
-  </div>
-  <h2 id="title-page" ><strong></strong></h2>
-  <br>
-  <h2 id="rule-name" ><strong></strong></h2>
-  <div id="timelines" ng-show = "timeline"></div>
-
-  <link href="../../../css/vis.css" rel="stylesheet" type="text/css" />
-  <link href="../../../css/styles.css" rel="stylesheet" type="text/css" />
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Lato" />
-  <!-- Bootstrap CSS -->
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<link href="../../../css/vis.css" rel="stylesheet" type="text/css" />
+<link href="../../../css/styles.css" rel="stylesheet" type="text/css" />
+<link
+  rel="stylesheet"
+  href="https://fonts.googleapis.com/css?family=Roboto|Lato"
+/>
+<!-- Bootstrap CSS -->
+<link
+  rel="stylesheet"
+  href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+  integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+  crossorigin="anonymous"
+/>
 
 <style>
-.custom-control-label::before, 
-.custom-control-label::after {
-top: .8rem;
-width: 1.25rem;
-height: 1.25rem;
-}
+  .custom-control-label::before,
+  .custom-control-label::after {
+    top: 0.8rem;
+    width: 1.25rem;
+    height: 1.25rem;
+  }
 </style>
-
-
-
-
-

@@ -1,40 +1,38 @@
 function showSummaries(yesNo) {
   if (yesNo) {
-    $("span.details").hide();
-    $("div.details").hide();
-    $("span.nodetails").show();
+    $('span.details').hide();
+    $('div.details').hide();
+    $('span.nodetails').show();
   } else {
-    $("span.details").show();
-    $("div.details").show();
-    $("span.nodetails").hide();
+    $('span.details').show();
+    $('div.details').show();
+    $('span.nodetails').hide();
   }
   try {
-    localStorage.setItem("showSummaries", yesNo);
-  } catch (e) { }
+    localStorage.setItem('showSummaries', yesNo);
+  } catch (e) {}
 }
 
 $(document).ready(function () {
-  var $showsumms = $("#showsumms");
-  $showsumms.on("change", function () {
-    showSummaries($showsumms.prop("checked"));
-  })
+  var $showsumms = $('#showsumms');
+  $showsumms.on('change', function () {
+    showSummaries($showsumms.prop('checked'));
+  });
 
   try {
-    if (localStorage.getItem("showSummaries") === "true") {
-      $showsumms.prop("checked") = true;
-      $("span.details").toggle();
-      $("span.nodetails").toggle(); // the "More..." button
-      $("div.details").toggle();
+    if (localStorage.getItem('showSummaries') === 'true') {
+      $showsumms.prop('checked', true);
+      $('span.details').toggle();
+      $('span.nodetails').toggle(); // the "More..." button
+      $('div.details').toggle();
     }
-  } catch (e) { };
+  } catch (e) {}
 });
 
-
 function hst(section) {
-  $("#" + section).toggle(500); // span details
-  $("#d" + section).toggle(500); // div details
-  $("#x" + section).toggle(); // "More..."
-
+  $('#' + section).toggle(500); // span details
+  $('#d' + section).toggle(500); // div details
+  $('#x' + section).toggle(); // "More..."
 }
 
 $('#bluecss').click(function () {
@@ -49,20 +47,20 @@ $('#colorfulcss').click(function () {
 var hash = null;
 function changeHash() {
   if (hash !== null) $(hash).css('background-color', '');
-  hash = window.location.hash.replace("#.", "#\\.");
+  hash = window.location.hash.replace('#.', '#\\.');
   $(hash).css('background-color', '#feffd3'); // light yellow
 }
 $(document).ready(changeHash);
 $(window).on('hashchange', changeHash);
 
 /* Based on typedoc search functionality */
-function initSearch () {
+function initSearch() {
   var SearchLoadingState;
   (function (SearchLoadingState) {
-    SearchLoadingState[SearchLoadingState["Idle"] = 0] = "Idle";
-    SearchLoadingState[SearchLoadingState["Loading"] = 1] = "Loading";
-    SearchLoadingState[SearchLoadingState["Ready"] = 2] = "Ready";
-    SearchLoadingState[SearchLoadingState["Failure"] = 3] = "Failure";
+    SearchLoadingState[(SearchLoadingState['Idle'] = 0)] = 'Idle';
+    SearchLoadingState[(SearchLoadingState['Loading'] = 1)] = 'Loading';
+    SearchLoadingState[(SearchLoadingState['Ready'] = 2)] = 'Ready';
+    SearchLoadingState[(SearchLoadingState['Failure'] = 3)] = 'Failure';
   })(SearchLoadingState || (SearchLoadingState = {}));
   var $el = $('#apisearch');
   var $field = $('#search-field');
@@ -88,18 +86,17 @@ function initSearch () {
           distance: 100,
           maxPatternLength: 50,
           minMatchCharLength: 1,
-          keys: ['name', 'member'] // search the full name and the member name
+          keys: ['name', 'member'], // search the full name and the member name
         };
         fuse = new Fuse(search, options);
         setLoadingState(SearchLoadingState.Ready);
       })
       .fail(function () {
-        setLoadingState(SearchLoadingState.Failure)
+        setLoadingState(SearchLoadingState.Failure);
       });
   }
   function loadIndex() {
-    if (loadingState != SearchLoadingState.Idle)
-      return;
+    if (loadingState != SearchLoadingState.Idle) return;
     setTimeout(function () {
       if (loadingState == SearchLoadingState.Idle) {
         setLoadingState(SearchLoadingState.Loading);
@@ -108,21 +105,20 @@ function initSearch () {
     createIndex();
   }
   function updateResults() {
-    if (loadingState != SearchLoadingState.Ready)
-      return;
+    if (loadingState != SearchLoadingState.Ready) return;
     $results.empty();
     var res = fuse.search(query);
     for (var i = 0, c = 0; i < res.length && c <= 10; i++) {
       var match = res[i];
       var name = match.name;
-      if (match.parent && match.member) name = `<span class="parent">${match.parent}.</span>${match.member}`;
+      if (match.parent && match.member)
+        name = `<span class="parent">${match.parent}.</span>${match.member}`;
       $results.append(`<li><a href="${base}${match.url}">${name}</li>`);
       c++;
     }
   }
   function setLoadingState(value) {
-    if (loadingState == value)
-      return;
+    if (loadingState == value) return;
     $el.removeClass(SearchLoadingState[loadingState].toLowerCase());
     loadingState = value;
     $el.addClass(SearchLoadingState[loadingState].toLowerCase());
@@ -131,8 +127,7 @@ function initSearch () {
     }
   }
   function setHasFocus(value) {
-    if (hasFocus == value)
-      return;
+    if (hasFocus == value) return;
     hasFocus = value;
     $el.toggleClass('has-focus');
     if (!value) {
@@ -149,7 +144,9 @@ function initSearch () {
   function setCurrentResult(dir) {
     var $current = $results.find('.current');
     if ($current.length == 0) {
-      $results.find(dir == 1 ? 'li:first-child' : 'li:last-child').addClass('current');
+      $results
+        .find(dir == 1 ? 'li:first-child' : 'li:last-child')
+        .addClass('current');
     } else {
       var $rel = dir == 1 ? $current.next('li') : $current.prev('li');
       if ($rel.length > 0) {
@@ -168,52 +165,81 @@ function initSearch () {
       $field.blur();
     }
   }
-  $field.on('focusin', function () {
-    setHasFocus(true);
-    loadIndex();
-  }).on('focusout', function () {
-    setTimeout(function () { return setHasFocus(false); }, 100);
-  }).on('input', function () {
-    setQuery($.trim($field.val()));
-  }).on('keydown', function (e) {
-    if (e.key === 'Enter' || e.key === 'Escape' || e.key === 'ArrowUp' || e.key === 'ArrowDown') {
-      preventPress = true;
-      e.preventDefault();
-      if (e.key === 'Enter') {
-        gotoCurrentResult();
-      } else if (e.key === 'Escape') {
-        $field.blur();
-      } else if (e.key === 'ArrowUp') {
-        setCurrentResult(-1);
-      } else if (e.key === 'ArrowDown') {
-        setCurrentResult(1);
+  $field
+    .on('focusin', function () {
+      setHasFocus(true);
+      loadIndex();
+    })
+    .on('focusout', function () {
+      setTimeout(function () {
+        return setHasFocus(false);
+      }, 100);
+    })
+    .on('input', function () {
+      setQuery($.trim($field.val()));
+    })
+    .on('keydown', function (e) {
+      if (
+        e.key === 'Enter' ||
+        e.key === 'Escape' ||
+        e.key === 'ArrowUp' ||
+        e.key === 'ArrowDown'
+      ) {
+        preventPress = true;
+        e.preventDefault();
+        if (e.key === 'Enter') {
+          gotoCurrentResult();
+        } else if (e.key === 'Escape') {
+          $field.blur();
+        } else if (e.key === 'ArrowUp') {
+          setCurrentResult(-1);
+        } else if (e.key === 'ArrowDown') {
+          setCurrentResult(1);
+        }
+      } else {
+        preventPress = false;
       }
-    } else {
-      preventPress = false;
-    }
-  }).on('keypress', function (e) {
-    if (preventPress)
-      e.preventDefault();
-  });
+    })
+    .on('keypress', function (e) {
+      if (preventPress) e.preventDefault();
+    });
 
   /**
    * Start searching by pressing an alpha key on the body.
    */
   $('body').on('keydown', function (e) {
     if (e.altKey || e.ctrlKey || e.metaKey) return;
-    if (!hasFocus && e.key && e.key.length === 1 && e.key.match(/[a-zA-Z]/) !== null) {
-        $field.focus();
+    if (
+      !hasFocus &&
+      e.key &&
+      e.key.length === 1 &&
+      e.key.match(/[a-zA-Z]/) !== null
+    ) {
+      $field.focus();
     }
   });
 }
 $(document).ready(initSearch);
 
 (function (i, s, o, g, r, a, m) {
-i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
-  (i[r].q = i[r].q || []).push(arguments)
-}, i[r].l = 1 * new Date(); a = s.createElement(o),
-  m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
-})(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+  i['GoogleAnalyticsObject'] = r;
+  (i[r] =
+    i[r] ||
+    function () {
+      (i[r].q = i[r].q || []).push(arguments);
+    }),
+    (i[r].l = 1 * new Date());
+  (a = s.createElement(o)), (m = s.getElementsByTagName(o)[0]);
+  a.async = 1;
+  a.src = g;
+  m.parentNode.insertBefore(a, m);
+})(
+  window,
+  document,
+  'script',
+  'https://www.google-analytics.com/analytics.js',
+  'ga'
+);
 
 ga('create', 'UA-1506307-5', 'auto');
 ga('send', 'pageview');

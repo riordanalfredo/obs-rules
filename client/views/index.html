@@ -1,418 +1,438 @@
 <!DOCTYPE html>
 <html ng-app="group-analytics">
   <head>
-  <script>
-      (function(apiKey){
-          (function(p,e,n,d,o){var v,w,x,y,z;o=p[d]=p[d]||{};o._q=o._q||[];
-          v=['initialize','identify','updateOptions','pageLoad','track'];for(w=0,x=v.length;w<x;++w)(function(m){
-              o[m]=o[m]||function(){o._q[m===v[0]?'unshift':'push']([m].concat([].slice.call(arguments,0)));};})(v[w]);
-              y=e.createElement(n);y.async=!0;y.src='https://cdn.pendo.io/agent/static/'+apiKey+'/pendo.js';
-              z=e.getElementsByTagName(n)[0];z.parentNode.insertBefore(y,z);})(window,document,'script','pendo');
+    <script>
+      (function (apiKey) {
+        (function (p, e, n, d, o) {
+          var v, w, x, y, z;
+          o = p[d] = p[d] || {};
+          o._q = o._q || [];
+          v = ['initialize', 'identify', 'updateOptions', 'pageLoad', 'track'];
+          for (w = 0, x = v.length; w < x; ++w)
+            (function (m) {
+              o[m] =
+                o[m] ||
+                function () {
+                  o._q[m === v[0] ? 'unshift' : 'push'](
+                    [m].concat([].slice.call(arguments, 0))
+                  );
+                };
+            })(v[w]);
+          y = e.createElement(n);
+          y.async = !0;
+          y.src = 'https://cdn.pendo.io/agent/static/' + apiKey + '/pendo.js';
+          z = e.getElementsByTagName(n)[0];
+          z.parentNode.insertBefore(y, z);
+        })(window, document, 'script', 'pendo');
 
-              // Call this whenever information about your visitors becomes available
-              // Please use Strings, Numbers, or Bools for value types.
-              pendo.initialize({
-                  visitor: {
-                      //id:              sessionid   // Required if user is logged in
-                      // email:        // Recommended if using Pendo Feedback, or NPS Email
-                      // full_name:    // Recommended if using Pendo Feedback
-                      // role:         // Optional
+        // Call this whenever information about your visitors becomes available
+        // Please use Strings, Numbers, or Bools for value types.
+        pendo.initialize({
+          visitor: {
+            //id:              sessionid   // Required if user is logged in
+            // email:        // Recommended if using Pendo Feedback, or NPS Email
+            // full_name:    // Recommended if using Pendo Feedback
+            // role:         // Optional
+            // You can add any additional visitor level key-values here,
+            // as long as it's not one of the above reserved names.
+          },
 
-                      // You can add any additional visitor level key-values here,
-                      // as long as it's not one of the above reserved names.
-                  },
-
-                  account: {
-                      //id:           'ACCOUNT-UNIQUE-ID' // Highly recommended
-                      // name:         // Optional
-                      // is_paying:    // Recommended if using Pendo Feedback
-                      // monthly_value:// Recommended if using Pendo Feedback
-                      // planLevel:    // Optional
-                      // planPrice:    // Optional
-                      // creationDate: // Optional
-
-                      // You can add any additional account level key-values here,
-                      // as long as it's not one of the above reserved names.
-                  }
-              });
+          account: {
+            //id:           'ACCOUNT-UNIQUE-ID' // Highly recommended
+            // name:         // Optional
+            // is_paying:    // Recommended if using Pendo Feedback
+            // monthly_value:// Recommended if using Pendo Feedback
+            // planLevel:    // Optional
+            // planPrice:    // Optional
+            // creationDate: // Optional
+            // You can add any additional account level key-values here,
+            // as long as it's not one of the above reserved names.
+          },
+        });
       })('7aec2249-7dd0-44b8-48fa-6f5f914e30b6');
-  </script>
-
-
+    </script>
 
     <title>Data Capture App</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1 shrink-to-fit=no">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
-    <link rel="stylesheet" href="/css/styles.css">
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1 shrink-to-fit=no"
+    />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"
+      integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="/css/styles.css" />
   </head>
   <body>
- <main role="main" class="container">
-         <br>
-        <nav class="navbar navbar-expand-md navbar-dark bg-dark mb-4">
-          <a class="navbar-brand" ng-href="#/"> Home </a>
-        </nav>
-        <br>
-        <div ng-view>
-
-        </div>
-        <br>
-  </main>
-  <!-- Template -->   
-<script type="text/ng-template" id="/allSessions.html">
-  <main role="main" class="container">
-      <div>
-        <h1>Sessions</h1>
-        <hr>
-        <p class="lead">All Sessions</p>
-      </div>
-      <div class="my-3 p-3 bg-white rounded box-shadow">
-        <div><button type="button" class="btn btn-primary btn-sm" ng-click="redirectSession();"> Add Session </button> 
-        </div> 
-        <br/>
-            <div class="pb-2 pt-2 mb-0 small lh-125 border-bottom border-gray" ng-repeat="todo in sessionData">
-              <div class="d-flex justify-content-end align-items-center w-100">
-                  <div class="flex-grow-1">
-                    <span>{{ todo.id }} </span> |
-                    <span>{{ todo.name }} </span> |
-                    <span class="text-info">{{ todo.room }} </span> |
-                  </div>
-    
-                  <div class=""><a href="javascript:void(0)" class=" mx-2 btn btn-info btn-sm" ng-click="redirectActionstoSession(todo.id)"> Actions </a></div>
-                  <div class=""><a href="javascript:void(0)" class="mx-2 btn btn-info btn-sm" ng-click="redirectSources(todo.id)"> Sources </a></div>
-                  <div class=""><a href="javascript:void(0)" class="mx-2 btn btn-info btn-sm" ng-click="redirectObjects(todo.id)"> Objects </a></div>
-                  <div class=""><a href="javascript:void(0)" class="mx-2 btn btn-info btn-sm" ng-click="redirectCapture(todo.id)"> Capture </a></div>
-                  <div class=""><a href="javascript:void(0)" class="mx-2 btn btn-info btn-sm" ng-click="redirectRules(todo.id)"> Assessment Criteria </a></div>
-
-                  <div class=""><a href="javascript:void(0)" class="btn btn-primary btn-sm" ng-click="listActions(todo.id)"> Log Actions </a></div>
-
-                   <div class=""><a href="javascript:void(0)" class="mx-2 btn btn-warning btn-sm" ng-click="redirectTimeline(todo.id)"> Layers </a></div>
-
-                  <div class=""><a href="javascript:void(0)" class="mx-2 btn btn-warning btn-sm" ng-click="redirectReports(todo.id)"> Reports </a></div>
-
-              </div>
-            </div>
-          
-      </div>
-  </main>
-</script>
-
-<script type="text/ng-template" id="/allActions.html">
-<main role="main" class="container">
-      <div>
-        <h1>Log Actions</h1>
-      </div>
-      
-        <div class="d-flex align-items-between w-100">
-        <div class="p-2"><span><a href="javascript:void(0)" class="btn btn-success btn-sm" ng-click="logStartStopActionSession(8,'Session started')"> Start Session </a></span></div>
-        <div class="p-2"><span><a href="javascript:void(0)" class="btn btn-danger btn-sm" ng-click="logStartStopActionSession(9,'Session ended')"> Stop Session </a></span></div>
-      </div>
-
-      <div class="my-3 p-3 bg-white rounded box-shadow">
-            <div class="pb-2 pt-2 mb-0 small lh-125 border-bottom border-gray" ng-repeat="actionsess in actionData">
-              <div class="d-flex justify-content-sm-between align-items-center w-100">
-             <div>{{ actionsess.action_desc }} 
-                   <div ng-show = "actionsess.action_type == 'critical'" ng-class="{'badge badge-warning': actionsess.action_type == 'critical'}">critical</div> 
-             </div>
-              <div><button type="button" ng-repeat="object in objectData" class="btn btn-outline-primary btn-sm mx-1" 
-                    role="button" ng-click="logActionObject(object.id,actionsess.id,actionsess.id_action,actionsess.action_desc)"> {{ object.name }}</button> </div>
-              </div>
-            </div>
-      </div>
-       <div class="alert alert-warning" role="alert">
-          You can add additional notes to each action. Click on "Save" to add your note.
-        </div>
-      <div class="my-3 p-3 bg-white rounded box-shadow">
-            <div class="pb-2 pt-2 mb-0 small lh-125 border-bottom border-gray" ng-repeat="sel in selectedactions track by sel.id">
-              <div class="d-flex justify-content-between">
-                 <div class="p-2 mr-auto">{{ sel.action_desc }} 
-                  <div ng-show = "sel.action_type == 'critical'" ng-class="{'badge badge-warning': sel.action_type == 'critical'}">critical</div> 
-                  <span class="text-secondary font-weight-light"> at: {{ sel.time_action | date:'medium' }}</span>
-
-                 </div>
-                  <div class="p-2">  
-                    <span class="text-info">  {{ sel.name }} </span> 
-                  </div>
-                  <div class="p-2">  
-                 <span>Notes: <input type="text" ng-model="fNotes[sel.id]" ng-init="getNote(sel.id)"></span>
-                  </div>
-                 
-                  <div class="p-2"><a href="javascript:void(0)" class="btn btn-outline-warning btn-sm" ng-click="updateNotes(sel.id)"> Save </a></div>
-
-                  <div class="p-2"><a href="javascript:void(0)" class="btn btn-outline-danger btn-sm" ng-click="deleteActionObject(sel.id)"> Delete </a></div>
-
-          
-            </div>
-
-        </div>
-        <div class="my-3 p-3 bg-white rounded box-shadow">
-      <button type="submit" class="btn btn-primary btn-lg btn-block" ng-click="redirectTimeline(sessionid)">Go to Timeline</button>
-          <br>
-      </div>
-        
-  </main>
-</script>
-
-<script type="text/ng-template" id="/addSession.html">
-  <main role="main" class="container">
-      <div>
-        <h1>Sessions</h1>
-        <hr>
-        <p class="lead">Add Session</p>
-      </div>
-      <div class="session-form">
-        <form>
-          <div class="form-group">
-            <span>Session name:</span><input type="text" class="form-control input-lg" placeholder="Enter text..." ng-model="formData.name">
-            <span>Room:</span><input type="text" class="form-control input-lg" placeholder="Enter text..." ng-model="formData.room">
+    <main role="main" class="container">
+      <br />
+      <nav class="navbar navbar-expand-md navbar-dark bg-dark mb-4">
+        <a class="navbar-brand" ng-href="#/"> Home </a>
+      </nav>
+      <br />
+      <div ng-view></div>
+      <br />
+    </main>
+    <!-- Template -->
+    <script type="text/ng-template" id="/allSessions.html">
+      <main role="main" class="container">
+          <div>
+            <h1>Sessions</h1>
+            <hr>
+            <p class="lead">All Sessions</p>
           </div>
-          <button type="submit" class="btn btn-primary btn-lg btn-block" ng-click="createSession()">Add Session</button>
-          <br>
-        </form>
-      </div>
-  </main>
-</script>
-
-<script type="text/ng-template" id="/addActionstoSession.html">
-<nav aria-label="breadcrumb">
-  <ol class="breadcrumb">
-    <li class="breadcrumb-item"><a>Add Session</a></li>
-    <li class="breadcrumb-item active" aria-current="page">Actions</li>
-  </ol>
-</nav>
-<main role="main" class="container">
-      <div>
-        <h1>Actions</h1>
-        <hr>
-        <p class="lead">Add Actions to this Session</p>
-      </div>
-       <div class="my-3 p-3 bg-white rounded box-shadow">
-        <div><button type="button" class="btn btn-primary btn-sm" ng-click="ShowInput()"> New Action </button> 
-        </div> 
-        <br/>
-      <div class="my-3 p-3 bg-white rounded box-shadow">
-        <div class="pb-2 pt-2 mb-0 small lh-125 border-bottom border-gray" ng-show = "IsVisible">
-          Action: <input type="text"  ng-model="inputActionName">
-           <input type="checkbox" ng-model="inputActionType" value="critical"> critical
-          <a href="javascript:void(0)" class="btn btn-outline-warning btn-sm" ng-click="AddNewAction()"> Save </a>
-        </div>
-            <div class="pb-2 pt-2 mb-0 small lh-125 border-bottom border-gray" ng-repeat="action in actionData">
-              <div class="d-flex align-items-center align-items-center w-100">
-             <div class="p-2 flex-grow-1">{{ action.name }}  <div ng-show = "action.action_type == 'critical'" ng-class="{'badge badge-warning': action.action_type == 'critical'}">critical</div> </div>
-            
-
-              <div class="p-2"><button type="button" class="btn btn-outline-primary btn-sm mx-1" 
-                    role="button" ng-click="addActionToSession(action.id,action.name,action)">  Add </button> 
-              </div>
-              <div class="p-2"><button type="button" class="btn btn-outline-danger btn-sm mx-1" 
-                    role="button" ng-click="deleteAction(action.id)">  Delete </button> 
-              </div>
+          <div class="my-3 p-3 bg-white rounded box-shadow">
+            <div><button type="button" class="btn btn-primary btn-sm" ng-click="redirectSession();"> Add Session </button>
             </div>
-            </div>
-      </div>
+            <br/>
+                <div class="pb-2 pt-2 mb-0 small lh-125 border-bottom border-gray" ng-repeat="todo in sessionData">
+                  <div class="d-flex justify-content-end align-items-center w-100">
+                      <div class="flex-grow-1">
+                        <span>{{ todo.id }} </span> |
+                        <span>{{ todo.name }} </span> |
+                        <span class="text-info">{{ todo.room }} </span> |
+                      </div>
 
-      
-      <div class="my-3 p-3 bg-white rounded box-shadow">
-        <p class="lead font-weight-bold">Selected actions:</p>
-            <div class="pb-2 pt-2 mb-0 small lh-125 border-bottom border-gray" ng-repeat="sel in addedActions">
-              <div class="d-flex align-items-center w-100">
-                 <div class="p-2 flex-grow-1">{{ sel.action_desc }} 
-                  <div ng-show = "sel.action_type == 'critical'" ng-class="{'badge badge-warning': sel.action_type == 'critical'}">critical</div> 
-                 </div>
-                  <div class="p-2"><a href="javascript:void(0)" class="btn btn-outline-danger btn-sm" ng-click="deleteActionSession(sel.id)"> Delete </a></div>
+                      <div class=""><a href="javascript:void(0)" class=" mx-2 btn btn-info btn-sm" ng-click="redirectActionstoSession(todo.id)"> Actions </a></div>
+                      <div class=""><a href="javascript:void(0)" class="mx-2 btn btn-info btn-sm" ng-click="redirectSources(todo.id)"> Sources </a></div>
+                      <div class=""><a href="javascript:void(0)" class="mx-2 btn btn-info btn-sm" ng-click="redirectObjects(todo.id)"> Objects </a></div>
+                      <div class=""><a href="javascript:void(0)" class="mx-2 btn btn-info btn-sm" ng-click="redirectCapture(todo.id)"> Capture </a></div>
+                      <div class=""><a href="javascript:void(0)" class="mx-2 btn btn-info btn-sm" ng-click="redirectRules(todo.id)"> Assessment Criteria </a></div>
 
-            </div>
+                      <div class=""><a href="javascript:void(0)" class="btn btn-primary btn-sm" ng-click="listActions(todo.id)"> Log Actions </a></div>
 
-            
-      </div>
-      <div class="my-3 p-3 bg-white rounded box-shadow">
-      <button type="submit" class="btn btn-primary btn-lg btn-block" ng-click="assignDataSources()">Assign Data Sources</button>
-          <br>
-      </div>
-  </main>
-</script>
+                       <div class=""><a href="javascript:void(0)" class="mx-2 btn btn-warning btn-sm" ng-click="redirectTimeline(todo.id)"> Layers </a></div>
 
+                      <div class=""><a href="javascript:void(0)" class="mx-2 btn btn-warning btn-sm" ng-click="redirectReports(todo.id)"> Reports </a></div>
 
-
-<script type="text/ng-template" id="/addMedia.html">
-<nav aria-label="breadcrumb">
-  <ol class="breadcrumb">
-    <li class="breadcrumb-item"><a>Add Session</a></li>
-    <li class="breadcrumb-item"><a href="#/actions/{{sessionid}}">Actions</a></li>
-    <li class="breadcrumb-item active" aria-current="page">Sources</li>
-  </ol>
-</nav>
-  <main role="main" class="container">
-      <div>
-        <h1>Data Sources</h1>
-        <hr>
-        <p class="lead">Add Data Sources</p>
-      </div>
-      
-      <div class="my-3 p-3 bg-white rounded box-shadow">
-            <div class="pb-2 pt-2 mb-0 small lh-125 border-bottom border-gray" ng-repeat="media in sourceData">
-              <div class="d-flex justify-content-sm-between align-items-center w-100">
-              <div>{{ media.vendor_name }} </div>
-                <div><button type="button" class="btn btn-primary btn-sm" ng-click="addSourceMedia(media.id,media.vendor_name);"> Add </button></a> 
+                  </div>
                 </div>
-              </div>
-            </div>
-      </div>
 
-      <div class="my-3 p-3 bg-white rounded box-shadow">
-            <div class="pb-2 pt-2 mb-0 small lh-125 border-bottom border-gray" ng-repeat="item in sourceSession">
+          </div>
+      </main>
+    </script>
+
+    <script type="text/ng-template" id="/allActions.html">
+      <main role="main" class="container">
+            <div>
+              <h1>Log Actions</h1>
+            </div>
+
+              <div class="d-flex align-items-between w-100">
+              <div class="p-2"><span><a href="javascript:void(0)" class="btn btn-success btn-sm" ng-click="logStartStopActionSession(8,'Session started')"> Start Session </a></span></div>
+              <div class="p-2"><span><a href="javascript:void(0)" class="btn btn-danger btn-sm" ng-click="logStartStopActionSession(9,'Session ended')"> Stop Session </a></span></div>
+            </div>
+
+            <div class="my-3 p-3 bg-white rounded box-shadow">
+                  <div class="pb-2 pt-2 mb-0 small lh-125 border-bottom border-gray" ng-repeat="actionsess in actionData">
+                    <div class="d-flex justify-content-sm-between align-items-center w-100">
+                   <div>{{ actionsess.action_desc }}
+                         <div ng-show = "actionsess.action_type == 'critical'" ng-class="{'badge badge-warning': actionsess.action_type == 'critical'}">critical</div>
+                   </div>
+                    <div><button type="button" ng-repeat="object in objectData" class="btn btn-outline-primary btn-sm mx-1"
+                          role="button" ng-click="logActionObject(object.id,actionsess.id,actionsess.id_action,actionsess.action_desc)"> {{ object.name }}</button> </div>
+                    </div>
+                  </div>
+            </div>
+             <div class="alert alert-warning" role="alert">
+                You can add additional notes to each action. Click on "Save" to add your note.
+              </div>
+            <div class="my-3 p-3 bg-white rounded box-shadow">
+                  <div class="pb-2 pt-2 mb-0 small lh-125 border-bottom border-gray" ng-repeat="sel in selectedactions track by sel.id">
+                    <div class="d-flex justify-content-between">
+                       <div class="p-2 mr-auto">{{ sel.action_desc }}
+                        <div ng-show = "sel.action_type == 'critical'" ng-class="{'badge badge-warning': sel.action_type == 'critical'}">critical</div>
+                        <span class="text-secondary font-weight-light"> at: {{ sel.time_action | date:'medium' }}</span>
+
+                       </div>
+                        <div class="p-2">
+                          <span class="text-info">  {{ sel.name }} </span>
+                        </div>
+                        <div class="p-2">
+                       <span>Notes: <input type="text" ng-model="fNotes[sel.id]" ng-init="getNote(sel.id)"></span>
+                        </div>
+
+                        <div class="p-2"><a href="javascript:void(0)" class="btn btn-outline-warning btn-sm" ng-click="updateNotes(sel.id)"> Save </a></div>
+
+                        <div class="p-2"><a href="javascript:void(0)" class="btn btn-outline-danger btn-sm" ng-click="deleteActionObject(sel.id)"> Delete </a></div>
+
+
+                  </div>
+
+              </div>
+              <div class="my-3 p-3 bg-white rounded box-shadow">
+            <button type="submit" class="btn btn-primary btn-lg btn-block" ng-click="redirectTimeline(sessionid)">Go to Timeline</button>
+                <br>
+            </div>
+
+        </main>
+    </script>
+
+    <script type="text/ng-template" id="/addSession.html">
+      <main role="main" class="container">
+          <div>
+            <h1>Sessions</h1>
+            <hr>
+            <p class="lead">Add Session</p>
+          </div>
+          <div class="session-form">
+            <form>
+              <div class="form-group">
+                <span>Session name:</span><input type="text" class="form-control input-lg" placeholder="Enter text..." ng-model="formData.name">
+                <span>Room:</span><input type="text" class="form-control input-lg" placeholder="Enter text..." ng-model="formData.room">
+              </div>
+              <button type="submit" class="btn btn-primary btn-lg btn-block" ng-click="createSession()">Add Session</button>
+              <br>
+            </form>
+          </div>
+      </main>
+    </script>
+
+    <script type="text/ng-template" id="/addActionstoSession.html">
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a>Add Session</a></li>
+          <li class="breadcrumb-item active" aria-current="page">Actions</li>
+        </ol>
+      </nav>
+      <main role="main" class="container">
+            <div>
+              <h1>Actions</h1>
+              <hr>
+              <p class="lead">Add Actions to this Session</p>
+            </div>
+             <div class="my-3 p-3 bg-white rounded box-shadow">
+              <div><button type="button" class="btn btn-primary btn-sm" ng-click="ShowInput()"> New Action </button>
+              </div>
+              <br/>
+            <div class="my-3 p-3 bg-white rounded box-shadow">
+              <div class="pb-2 pt-2 mb-0 small lh-125 border-bottom border-gray" ng-show = "IsVisible">
+                Action: <input type="text"  ng-model="inputActionName">
+                 <input type="checkbox" ng-model="inputActionType" value="critical"> critical
+                <a href="javascript:void(0)" class="btn btn-outline-warning btn-sm" ng-click="AddNewAction()"> Save </a>
+              </div>
+                  <div class="pb-2 pt-2 mb-0 small lh-125 border-bottom border-gray" ng-repeat="action in actionData">
+                    <div class="d-flex align-items-center align-items-center w-100">
+                   <div class="p-2 flex-grow-1">{{ action.name }}  <div ng-show = "action.action_type == 'critical'" ng-class="{'badge badge-warning': action.action_type == 'critical'}">critical</div> </div>
+
+
+                    <div class="p-2"><button type="button" class="btn btn-outline-primary btn-sm mx-1"
+                          role="button" ng-click="addActionToSession(action.id,action.name,action)">  Add </button>
+                    </div>
+                    <div class="p-2"><button type="button" class="btn btn-outline-danger btn-sm mx-1"
+                          role="button" ng-click="deleteAction(action.id)">  Delete </button>
+                    </div>
+                  </div>
+                  </div>
+            </div>
+
+
+            <div class="my-3 p-3 bg-white rounded box-shadow">
+              <p class="lead font-weight-bold">Selected actions:</p>
+                  <div class="pb-2 pt-2 mb-0 small lh-125 border-bottom border-gray" ng-repeat="sel in addedActions">
+                    <div class="d-flex align-items-center w-100">
+                       <div class="p-2 flex-grow-1">{{ sel.action_desc }}
+                        <div ng-show = "sel.action_type == 'critical'" ng-class="{'badge badge-warning': sel.action_type == 'critical'}">critical</div>
+                       </div>
+                        <div class="p-2"><a href="javascript:void(0)" class="btn btn-outline-danger btn-sm" ng-click="deleteActionSession(sel.id)"> Delete </a></div>
+
+                  </div>
+
+
+            </div>
+            <div class="my-3 p-3 bg-white rounded box-shadow">
+            <button type="submit" class="btn btn-primary btn-lg btn-block" ng-click="assignDataSources()">Assign Data Sources</button>
+                <br>
+            </div>
+        </main>
+    </script>
+
+    <script type="text/ng-template" id="/addMedia.html">
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a>Add Session</a></li>
+          <li class="breadcrumb-item"><a href="#/actions/{{sessionid}}">Actions</a></li>
+          <li class="breadcrumb-item active" aria-current="page">Sources</li>
+        </ol>
+      </nav>
+        <main role="main" class="container">
+            <div>
+              <h1>Data Sources</h1>
+              <hr>
+              <p class="lead">Add Data Sources</p>
+            </div>
+
+            <div class="my-3 p-3 bg-white rounded box-shadow">
+                  <div class="pb-2 pt-2 mb-0 small lh-125 border-bottom border-gray" ng-repeat="media in sourceData">
+                    <div class="d-flex justify-content-sm-between align-items-center w-100">
+                    <div>{{ media.vendor_name }} </div>
+                      <div><button type="button" class="btn btn-primary btn-sm" ng-click="addSourceMedia(media.id,media.vendor_name);"> Add </button></a>
+                      </div>
+                    </div>
+                  </div>
+            </div>
+
+            <div class="my-3 p-3 bg-white rounded box-shadow">
+                  <div class="pb-2 pt-2 mb-0 small lh-125 border-bottom border-gray" ng-repeat="item in sourceSession">
+                    <div class="d-flex justify-content-sm-between align-items-center w-100">
+                   <div class="p-2">{{ item.name}} </div>
+
+                   <div class="p-2">
+                    <select ng-if="item.id_datatype == 3 " ng-init="selectedWristband = item.id_empatica"
+                            ng-model="selectedWristband"
+                            ng-change="updateWristbandDatatypeSession(item.id_session_datatype, selectedWristband)">
+                      <option value="">--None--</option>
+                      <option ng-repeat="x in trackers_empatica" value="{{x.serial}}">{{x.serial}}</option>
+                    </select>
+                    </div>
+
+                   <div class="p-2"><a href="javascript:void(0)" class="btn btn-outline-danger btn-sm" ng-click="deleteSourceSession(item.id_datatype,item.id_session_datatype)"> Delete </a></div>
+                    </div>
+                  </div>
+            </div>
+
+                <button type="submit" class="btn btn-primary btn-lg btn-block" ng-click="assignObjects()">Assign Objects</button>
+                <br>
+            </div>
+        </main>
+    </script>
+
+    <script type="text/ng-template" id="/addObjects.html">
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a>Add Session</a></li>
+          <li class="breadcrumb-item"><a href="#/actions/{{sessionid}}">Actions</a></li>
+          <li class="breadcrumb-item"><a href="#/media/{{sessionid}}">Sources</a></li>
+          <li class="breadcrumb-item active" aria-current="page">Objects</li>
+        </ol>
+      </nav>
+        <main role="main" class="container">
+            <div>
+              <h1>Objects</h1>
+              <hr>
+              <p class="lead">Which objects:</p>
+            </div>
+
+            <div class="my-3 p-3 bg-white rounded box-shadow">
+                  <div class="pb-2 pt-2 mb-0 small lh-125 border-bottom border-gray" ng-repeat="object in objectsData">
+                    <div class="d-flex justify-content-sm-between align-items-center w-100">
+                    <div>{{ object.name }} </div>
+                      <div><button type="button" class="btn btn-primary btn-sm" ng-click="addObjectSession(object.id,object.name);"> Add </button></a>
+                      </div>
+                    </div>
+                  </div>
+            </div>
+
+            <div class="my-3 p-3 bg-white rounded box-shadow">
+              <div class="alert alert-warning" role="alert">
+                Please, edit ALL the labels to make them three characters. Click on "Change" to save each new label.
+              </div>
+
+            <div class="alert alert-danger" role="alert">
+              Edit the label of the patient to PTN (remove character '1').
+            </div>
+
+            <div class="pb-2 pt-2 mb-0 small lh-125 border-bottom border-gray" ng-repeat="item in objectsperSessionData">
               <div class="d-flex justify-content-sm-between align-items-center w-100">
-             <div class="p-2">{{ item.name}} </div>
-             
-             <div class="p-2"> 
-              <select ng-if="item.id_datatype == 3 " ng-init="selectedWristband = item.id_empatica"  
-                      ng-model="selectedWristband"
-                      ng-change="updateWristbandDatatypeSession(item.id_session_datatype, selectedWristband)">
-                <option value="">--None--</option>
-                <option ng-repeat="x in trackers_empatica" value="{{x.serial}}">{{x.serial}}</option>
+                <div class="flex-fill">
+                  <span>
+                    <input type="text" ng-model="fObjectName[item.id]" ng-init="fObjectName[item.id]=item.name">
+                  </span>
+                   <span><a href="javascript:void(0)" class="btn btn-outline-warning btn-sm" ng-click="updateObjectName(item.id)"> Change </a>
+                   </span>
+                  <div>
+                    <span class="text-secondary font-italic"> tag: {{selectedTracker}} </span>
+                    <span class="text-secondary font-italic"> empatica: {{selectedWristband}} </span>
+                  </div>
+                </div>
+
+              <div class="p-2">
+              <select ng-init="selectedTracker = item.serial"
+                      ng-model="selectedTracker"
+                      ng-change="updateTagObjSession(item.id, selectedTracker)">
+                <option value="">--Tag--</option>
+                <option ng-repeat="x in trackers_pozyx" value="{{x.serial}}">{{x.serial}}</option>
               </select>
               </div>
 
-             <div class="p-2"><a href="javascript:void(0)" class="btn btn-outline-danger btn-sm" ng-click="deleteSourceSession(item.id_datatype,item.id_session_datatype)"> Delete </a></div>
+              <div class="p-2  w-50">
+              <select ng-if="item.id_object == 6 || item.id_object == 1" ng-init="selectedWristband = item.empatica"
+                      ng-model="selectedWristband"
+                      ng-change="updateWristbandObjSession(item.id, selectedWristband)">
+                <option value="">--Empatica--</option>
+                <option ng-repeat="x in trackers_empatica" value="{{x.id_empatica}}">{{x.name}}:{{x.id_empatica}}</option>
+              </select>
+              <p class="text-secondary" ng-if="!(item.id_object == 6 || item.id_object == 1 || item.id_object == 4)"> Not available </p>
+              <p class="text-secondary" ng-if="item.id_object == 4">
+                    (x, y) <input type="text" ng-model='coordinates' ng-init="coordinates=item.coordinates">
+                     <span><a href="javascript:void(0)" class="btn btn-outline-warning btn-sm" ng-click="addFixedCoordinates(item.id, coordinates)"> Add </a>
+              </p>
               </div>
-            </div>
-      </div>
-          
-          <button type="submit" class="btn btn-primary btn-lg btn-block" ng-click="assignObjects()">Assign Objects</button>
-          <br>
-      </div>
-  </main>
-</script>
+               <div class="p-2">
+                  <a href="javascript:void(0)" class="btn btn-outline-danger btn-sm" ng-click="deleteObjectSession(item.id)"> Delete </a>
+               </div>
 
-<script type="text/ng-template" id="/addObjects.html">
-<nav aria-label="breadcrumb">
-  <ol class="breadcrumb">
-    <li class="breadcrumb-item"><a>Add Session</a></li>
-    <li class="breadcrumb-item"><a href="#/actions/{{sessionid}}">Actions</a></li>
-    <li class="breadcrumb-item"><a href="#/media/{{sessionid}}">Sources</a></li>
-    <li class="breadcrumb-item active" aria-current="page">Objects</li>
-  </ol>
-</nav>
-  <main role="main" class="container">
-      <div>
-        <h1>Objects</h1>
-        <hr>
-        <p class="lead">Which objects:</p>
-      </div>
-      
-      <div class="my-3 p-3 bg-white rounded box-shadow">
-            <div class="pb-2 pt-2 mb-0 small lh-125 border-bottom border-gray" ng-repeat="object in objectsData">
-              <div class="d-flex justify-content-sm-between align-items-center w-100">
-              <div>{{ object.name }} </div>
-                <div><button type="button" class="btn btn-primary btn-sm" ng-click="addObjectSession(object.id,object.name);"> Add </button></a> 
-                </div>
-              </div>
-            </div>
-      </div>
-
-      <div class="my-3 p-3 bg-white rounded box-shadow">
-        <div class="alert alert-warning" role="alert">
-          Please, edit ALL the labels to make them three characters. Click on "Change" to save each new label.
-        </div>
-
-      <div class="alert alert-danger" role="alert">
-        Edit the label of the patient to PTN (remove character '1').
-      </div>
-
-      <div class="pb-2 pt-2 mb-0 small lh-125 border-bottom border-gray" ng-repeat="item in objectsperSessionData">
-        <div class="d-flex justify-content-sm-between align-items-center w-100">
-          <div class="flex-fill">
-            <span>
-              <input type="text" ng-model="fObjectName[item.id]" ng-init="fObjectName[item.id]=item.name">
-            </span>
-             <span><a href="javascript:void(0)" class="btn btn-outline-warning btn-sm" ng-click="updateObjectName(item.id)"> Change </a>
-             </span>
-            <div>
-              <span class="text-secondary font-italic"> tag: {{selectedTracker}} </span>
-              <span class="text-secondary font-italic"> empatica: {{selectedWristband}} </span>
-            </div>
+             </div>
+          </div>
           </div>
 
-        <div class="p-2"> 
-        <select ng-init="selectedTracker = item.serial"  
-                ng-model="selectedTracker"
-                ng-change="updateTagObjSession(item.id, selectedTracker)">
-          <option value="">--Tag--</option>
-          <option ng-repeat="x in trackers_pozyx" value="{{x.serial}}">{{x.serial}}</option>
-        </select>
-        </div>
-
-        <div class="p-2  w-50"> 
-        <select ng-if="item.id_object == 6 || item.id_object == 1" ng-init="selectedWristband = item.empatica"  
-                ng-model="selectedWristband"
-                ng-change="updateWristbandObjSession(item.id, selectedWristband)">
-          <option value="">--Empatica--</option>
-          <option ng-repeat="x in trackers_empatica" value="{{x.id_empatica}}">{{x.name}}:{{x.id_empatica}}</option>
-        </select>
-        <p class="text-secondary" ng-if="!(item.id_object == 6 || item.id_object == 1 || item.id_object == 4)"> Not available </p>
-        <p class="text-secondary" ng-if="item.id_object == 4">
-              (x, y) <input type="text" ng-model='coordinates' ng-init="coordinates=item.coordinates">
-               <span><a href="javascript:void(0)" class="btn btn-outline-warning btn-sm" ng-click="addFixedCoordinates(item.id, coordinates)"> Add </a>
-        </p>
-        </div>
-         <div class="p-2">
-            <a href="javascript:void(0)" class="btn btn-outline-danger btn-sm" ng-click="deleteObjectSession(item.id)"> Delete </a>
-         </div>
-
-       </div>
-    </div>
-    </div>
-          
-          <button type="submit" class="btn btn-primary btn-lg btn-block" ng-click="controlSources()">Manage Capture</button>
-          <br>
-      </div>
-  </main>
-</script>
-
-<script type="text/ng-template" id="/controlSources.html">
-<nav aria-label="breadcrumb">
-  <ol class="breadcrumb">
-    <li class="breadcrumb-item"><a>Add Session</a></li>
-    <li class="breadcrumb-item"><a href="#/actions/{{sessionid}}">Actions</a></li>
-    <li class="breadcrumb-item"><a href="#/media/{{sessionid}}">Sources</a></li>
-    <li class="breadcrumb-item"><a href="#/objects/{{sessionid}}">Objects</a></li>
-    <li class="breadcrumb-item active" aria-current="page">Sync</li>
-  </ol>
-</nav>
-<main role="main" class="container">
-      <div>
-        <h1>Manually Sync</h1>
-        <hr>
-        <p class="lead">Start/Stop Data Capture</p>
-      </div>
-
-      <div class="my-3 p-3 bg-white rounded box-shadow">
-            <div class="pb-2 pt-2 mb-0 small lh-125 border-bottom border-gray" ng-repeat="item in sourceSession">
-              <div class="d-flex justify-content-sm-between align-items-center w-100">
-                    <div>{{ item.name }}: {{ item.id_empatica }}
-                      <span class="text-secondary font-weight-light"> start: {{ item.start_capture | date:'mediumTime' }}</span>
-                      <span class="text-secondary font-weight-light"> end: {{ item.end_capture | date:'mediumTime' }}</span>
-                    </div>
-                  <div>
-                    <button class="btn btn-sm" ng-class="{'btn-primary': item.status == 0, 'disabled': item.status == 1 }" ng-click="startCapture(item.id_session,item.id_datatype,item.id_session_datatype);"> Start </button>
-
-                    <button class="btn btn-sm" ng-class="{'btn-primary': item.status == 1, 'disabled': item.status == 0 }" ng-click="stopCapture(item.id_session,item.id_datatype,item.id_session_datatype);"> Stop </button>
-                  </div>
-              </div>
+                <button type="submit" class="btn btn-primary btn-lg btn-block" ng-click="controlSources()">Manage Capture</button>
+                <br>
             </div>
-      </div>
-      <button class="btn btn-success" ng-click="startAll(sessionid)">Start All</button>
-      <button class="btn btn-danger" ng-click="stopAll(sessionid)">Stop All</button>
-      
-      <div class="container">
-          <video id="mainvideo" autoplay playsinline></video>
-      </div> 
+        </main>
+    </script>
 
-      <button type="submit" class="btn btn-primary btn-lg btn-block" ng-click="redirectRules(sessionid)">Add Assessment criteria</button>
+    <script type="text/ng-template" id="/controlSources.html">
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a>Add Session</a></li>
+          <li class="breadcrumb-item"><a href="#/actions/{{sessionid}}">Actions</a></li>
+          <li class="breadcrumb-item"><a href="#/media/{{sessionid}}">Sources</a></li>
+          <li class="breadcrumb-item"><a href="#/objects/{{sessionid}}">Objects</a></li>
+          <li class="breadcrumb-item active" aria-current="page">Sync</li>
+        </ol>
+      </nav>
+      <main role="main" class="container">
+            <div>
+              <h1>Manually Sync</h1>
+              <hr>
+              <p class="lead">Start/Stop Data Capture</p>
+            </div>
 
-</main>
-</script>
+            <div class="my-3 p-3 bg-white rounded box-shadow">
+                  <div class="pb-2 pt-2 mb-0 small lh-125 border-bottom border-gray" ng-repeat="item in sourceSession">
+                    <div class="d-flex justify-content-sm-between align-items-center w-100">
+                          <div>{{ item.name }}: {{ item.id_empatica }}
+                            <span class="text-secondary font-weight-light"> start: {{ item.start_capture | date:'mediumTime' }}</span>
+                            <span class="text-secondary font-weight-light"> end: {{ item.end_capture | date:'mediumTime' }}</span>
+                          </div>
+                        <div>
+                          <button class="btn btn-sm" ng-class="{'btn-primary': item.status == 0, 'disabled': item.status == 1 }" ng-click="startCapture(item.id_session,item.id_datatype,item.id_session_datatype);"> Start </button>
+
+                          <button class="btn btn-sm" ng-class="{'btn-primary': item.status == 1, 'disabled': item.status == 0 }" ng-click="stopCapture(item.id_session,item.id_datatype,item.id_session_datatype);"> Stop </button>
+                        </div>
+                    </div>
+                  </div>
+            </div>
+            <button class="btn btn-success" ng-click="startAll(sessionid)">Start All</button>
+            <button class="btn btn-danger" ng-click="stopAll(sessionid)">Stop All</button>
+
+            <div class="container">
+                <video id="mainvideo" autoplay playsinline></video>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-lg btn-block" ng-click="redirectRules(sessionid)">Add Assessment criteria</button>
+
+      </main>
+    </script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"
+      integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T"
+      crossorigin="anonymous"
+    ></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.6/angular.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.6/angular-sanitize.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.6/angular-route.min.js"></script>
@@ -424,6 +444,5 @@
     <script src="js/html2canvas.js"></script>
     <script src="js/jsPDF/dist/jspdf.umd.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.4/jspdf.min.js"></script>
-
   </body>
 </html>
